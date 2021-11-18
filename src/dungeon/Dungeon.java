@@ -42,7 +42,7 @@ public interface Dungeon {
    *
    * @return a Set of {@link Move}s
    */
-  Set<Move> getAvailableMoves();
+  Set<Move> getAvailableDirections();
 
   /**
    * Checks whether the player has visited the end cave.
@@ -50,6 +50,13 @@ public interface Dungeon {
    * @return true if {@link Player} has visited the end cave.
    */
   boolean playerVisitedEnd();
+
+  /**
+   * Checks whether the game is over or not.
+   *
+   * @return true if game has ended.
+   */
+  boolean isGameOver();
 
   /**
    * Moves the player in the maze in the provided Move direction.
@@ -71,4 +78,38 @@ public interface Dungeon {
    * @return player in the maze as a {@link Player}.
    */
   Player getPlayerDescription();
+
+  /**
+   * Gets the SmellLevel at the provided location.
+   *
+   * @param location the location whose smell level is to be obtained.
+   * @return SmellLevel of the particular location.
+   * @throws IllegalStateException if there is problem with SmellLevel at the location.
+   */
+  SmellLevel getSmell(Location location) throws IllegalStateException;
+
+  /**
+   * Fires the crooked arrow in the specified direction and distance.
+   *
+   * @param direction the direction in which to fire the arrow.
+   * @param arrowDistance the number of caves the arrow should traverse.
+   * @return true if a monster is successfully hit.
+   * @throws IllegalArgumentException if distance is less than 1 or greater than 5.
+   * @throws IllegalArgumentException if an invalid direction is provided.
+   */
+  boolean shootArrow(Move direction, int arrowDistance);
+
+  /**
+   * Makes the player pick the arrows from the their current location.
+   *
+   * @throws IllegalStateException if the current location has no arrows.
+   */
+  void playerPickArrows() throws IllegalStateException;
+
+  /**
+   * Checks whether the player is alive or dead.
+   *
+   * @return true if {@link Player} has been killed.
+   */
+  boolean isPlayerDead();
 }

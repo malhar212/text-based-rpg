@@ -17,6 +17,8 @@ public final class LocationNode implements LocationPrivate {
   private final Map<Treasure, Integer> treasure;
   private final int row;
   private final int column;
+  private Monster monster;
+  private int arrows;
 
   /**
    * Creates an instance of LocationNode with the given row and column value.
@@ -29,6 +31,8 @@ public final class LocationNode implements LocationPrivate {
     this.column = column;
     this.nextMoves = new TreeSet<>();
     this.treasure = new HashMap<>();
+    this.monster = null;
+    this.arrows = 0;
   }
 
   /**
@@ -158,5 +162,92 @@ public final class LocationNode implements LocationPrivate {
       }
     }
     return false;
+  }
+
+  /**
+   * Checks whether the current location has a Monster.
+   *
+   * @return true if a monster is present at this location.
+   */
+  @Override
+  public boolean hasMonster() {
+    if (monster != null) {
+      return !monster.isDead();
+    }
+    return false;
+  }
+
+  /**
+   * Returns the monster at this location.
+   *
+   * @return the monster at this location.
+   */
+  //package-private due to interface
+  @Override
+  public Monster getMonster() {
+    return monster;
+  }
+
+  /**
+   * Returns whether the location is a cave or tunnel.
+   *
+   * @return true if it is a cave, false if it is a tunnel.
+   */
+  @Override
+  public boolean isCave() {
+    return !(nextMoves.size() == 2);
+  }
+
+  /**
+   * Checks whether this LocationNode has arrows.
+   *
+   * @return true if there are arrows at this location.
+   */
+  @Override
+  public boolean hasArrows() {
+    return arrows > 0;
+  }
+
+  /**
+   * Returns the number of arrows at this location.
+   *
+   * @return number of arrows at this location.
+   */
+  @Override
+  public int getArrows() {
+    return arrows;
+  }
+
+  //package-private due to interface.
+  @Override
+  public void hitMonster() {
+    if (monster != null) {
+      monster.arrowHit();
+    }
+  }
+
+  //package-private due to interface
+  @Override
+  public void setMonster() {
+    if (monster == null) {
+      monster = new UrukHai();
+    }
+  }
+
+  //package-private due to interface
+  @Override
+  public int pickArrows() throws IllegalStateException {
+    if (hasArrows()) {
+      int arrows = this.arrows;
+      this.arrows = 0;
+      return arrows;
+    }
+    throw new IllegalStateException("There are no arrows to pick");
+  }
+
+  //package-private due to interface
+  @Override
+  public void setArrows(int numberOfArrows) {
+    arrows = numberOfArrows;
   }
 }

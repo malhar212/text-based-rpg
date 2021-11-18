@@ -26,7 +26,7 @@ import java.util.Set;
  * Test the Dungeon game.
  */
 public class DungeonTest {
-  private Dungeon dungeonWrapped;
+  /*private Dungeon dungeonWrapped;
   private Dungeon dungeonWrappedInterconnectivity;
   private Dungeon dungeonWrappedInterconnectivityTreasure30;
   private Dungeon dungeon;
@@ -626,7 +626,7 @@ public class DungeonTest {
     Location startLocation = dungeon.getStartLocation();
     Location playerLocation = dungeon.getPlayerCurrentLocation();
     assertTrue(compareLocations(startLocation, playerLocation));
-    List<Move> dungeonAvailableMoves = new ArrayList<>(dungeon.getAvailableMoves());
+    List<Move> dungeonAvailableMoves = new ArrayList<>(dungeon.getAvailableDirections());
     int randomIndex = randomizer.getRandomValue(0, dungeonAvailableMoves.size() - 1);
     Move move = dungeonAvailableMoves.get(randomIndex);
     List<Integer> nextLocation = getNextLocation(move, dungeon);
@@ -643,7 +643,7 @@ public class DungeonTest {
     startLocation = dungeonWrapped.getStartLocation();
     playerLocation = dungeonWrapped.getPlayerCurrentLocation();
     assertTrue(compareLocations(startLocation, playerLocation));
-    dungeonAvailableMoves = new ArrayList<>(dungeonWrapped.getAvailableMoves());
+    dungeonAvailableMoves = new ArrayList<>(dungeonWrapped.getAvailableDirections());
     randomIndex = randomizer.getRandomValue(0, dungeonAvailableMoves.size() - 1);
     move = dungeonAvailableMoves.get(randomIndex);
     nextLocation = getNextLocation(move, dungeonWrapped);
@@ -660,7 +660,7 @@ public class DungeonTest {
     startLocation = dungeonWrappedInterconnectivity.getStartLocation();
     playerLocation = dungeonWrappedInterconnectivity.getPlayerCurrentLocation();
     assertTrue(compareLocations(startLocation, playerLocation));
-    dungeonAvailableMoves = new ArrayList<>(dungeonWrappedInterconnectivity.getAvailableMoves());
+    dungeonAvailableMoves = new ArrayList<>(dungeonWrappedInterconnectivity.getAvailableDirections());
     randomIndex = randomizer.getRandomValue(0, dungeonAvailableMoves.size() - 1);
     move = dungeonAvailableMoves.get(randomIndex);
     nextLocation = getNextLocation(move, dungeonWrappedInterconnectivity);
@@ -678,7 +678,7 @@ public class DungeonTest {
     playerLocation = dungeonWrappedInterconnectivityTreasure30.getPlayerCurrentLocation();
     assertTrue(compareLocations(startLocation, playerLocation));
     dungeonAvailableMoves =
-            new ArrayList<>(dungeonWrappedInterconnectivityTreasure30.getAvailableMoves());
+            new ArrayList<>(dungeonWrappedInterconnectivityTreasure30.getAvailableDirections());
     randomIndex = randomizer.getRandomValue(0, dungeonAvailableMoves.size() - 1);
     move = dungeonAvailableMoves.get(randomIndex);
     nextLocation = getNextLocation(move, dungeonWrappedInterconnectivityTreasure30);
@@ -695,7 +695,7 @@ public class DungeonTest {
     startLocation = dungeonTreasure30.getStartLocation();
     playerLocation = dungeonTreasure30.getPlayerCurrentLocation();
     assertTrue(compareLocations(startLocation, playerLocation));
-    dungeonAvailableMoves = new ArrayList<>(dungeonTreasure30.getAvailableMoves());
+    dungeonAvailableMoves = new ArrayList<>(dungeonTreasure30.getAvailableDirections());
     randomIndex = randomizer.getRandomValue(0, dungeonAvailableMoves.size() - 1);
     move = dungeonAvailableMoves.get(randomIndex);
     nextLocation = getNextLocation(move, dungeonTreasure30);
@@ -713,7 +713,7 @@ public class DungeonTest {
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidMoveException() {
-    Set<Move> availableMoves = dungeon.getAvailableMoves();
+    Set<Move> availableMoves = dungeon.getAvailableDirections();
     for (Move move : Move.values()) {
       if (!availableMoves.contains(move)) {
         dungeon.movePlayer(move);
@@ -920,7 +920,7 @@ public class DungeonTest {
       if (playerCurrentLocation.hasTreasure()) {
         dungeon.playerPickTreasure();
       }
-      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableMoves());
+      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableDirections());
       Collections.shuffle(availableMoves);
       goNextMove(dungeon, playerCurrentLocation, availableMoves);
     }
@@ -934,7 +934,7 @@ public class DungeonTest {
       Location playerCurrentLocation = dungeon.getPlayerCurrentLocation();
       int row = playerCurrentLocation.getRow();
       int column = playerCurrentLocation.getColumn();
-      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableMoves());
+      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableDirections());
       Collections.shuffle(availableMoves);
       if (!visitedGrid[row][column]) {
         exitsFromNodes += availableMoves.size();
@@ -954,7 +954,7 @@ public class DungeonTest {
       if (playerCurrentLocation.hasTreasure()) {
         dungeon.playerPickTreasure();
       }
-      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableMoves());
+      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableDirections());
       Collections.shuffle(availableMoves);
       goNextMove(dungeon, playerCurrentLocation, availableMoves);
     }
@@ -967,7 +967,7 @@ public class DungeonTest {
       if (playerCurrentLocation.hasTreasure()) {
         break;
       }
-      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableMoves());
+      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableDirections());
       Collections.shuffle(availableMoves);
       goNextMove(dungeon, playerCurrentLocation, availableMoves);
     }
@@ -1099,5 +1099,5 @@ public class DungeonTest {
 
   private int getExpectedNumberOfPaths(Dungeon dungeon, int interconnectivity) {
     return ((dungeon.getMaze().size() * dungeon.getMaze().get(1).size()) - 1) + interconnectivity;
-  }
+  }*/
 }

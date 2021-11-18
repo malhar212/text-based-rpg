@@ -10,12 +10,15 @@ import java.util.Map;
  */
 public class PlayerModel implements PlayerPrivate {
   private final Map<Treasure, Integer> treasure;
+  private int arrows;
+  private static final int DEFAULT_ARROWS = 3;
 
   /**
    * Creates a new instance of PlayerModel.
    */
   public PlayerModel() {
     this.treasure = new HashMap<>();
+    this.arrows = 3;
   }
 
   /**
@@ -46,6 +49,21 @@ public class PlayerModel implements PlayerPrivate {
   }
 
   /**
+   * Returns the number of arrows that the player currently carries.
+   *
+   * @return number of arrows with the player.
+   */
+  @Override
+  public int getArrows() {
+    return arrows;
+  }
+
+  @Override
+  public boolean hasArrows() {
+    return arrows > 0;
+  }
+
+  /**
    * Adds the provided treasure and quantity to the player's treasure.
    *
    * @param treasure         treasure type to be added.
@@ -70,5 +88,25 @@ public class PlayerModel implements PlayerPrivate {
       integer += treasureQuantity;
     }
     this.treasure.put(treasure, integer);
+  }
+
+  /**
+   * Fires an arrow from the user.
+   *
+   * @throws IllegalStateException if called when user has no arrows;
+   */
+  //package-private due to interface
+  //TODO maybe change to boolean
+  @Override
+  public void fireArrow() throws IllegalStateException {
+    if (arrows <= 0) {
+      throw new IllegalStateException("Player has no arrows");
+    }
+    arrows--;
+  }
+
+  @Override
+  public void pickArrows(int arrows) {
+    this.arrows += arrows;
   }
 }

@@ -44,4 +44,33 @@ public interface Location {
    * @return true if treasure is present in the location.
    */
   boolean hasTreasure();
+
+  /**
+   * Checks whether the current location has a Monster.
+   *
+   * @return true if a monster is present at this location.
+   */
+  boolean hasMonster();
+
+  /**
+   * Returns whether the location is a cave or tunnel.
+   *
+   * @return true if it is a cave, false if it is a tunnel.
+   */
+  boolean isCave();
+
+  /**
+   * Checks whether this LocationNode has arrows.
+   *
+   * @return true if there are arrows at this location.
+   */
+  boolean hasArrows();
+
+  /**
+   * Returns the number of arrows at this location.
+   *
+   * @return number of arrows at this location.
+   */
+  int getArrows();
+
 }

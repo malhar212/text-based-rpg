@@ -5,4 +5,8 @@ package dungeon;
 interface PlayerPrivate extends Player {
 
   void addToTreasure(Treasure treasure, int randomTreasureQuantity) throws IllegalArgumentException;
+
+  void fireArrow();
+
+  void pickArrows(int arrows);
 }

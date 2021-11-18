@@ -1,4 +1,15 @@
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
 import dungeon.Dungeon;
+import dungeon.DungeonConsoleController;
+import dungeon.DungeonController;
 import dungeon.DungeonModel;
 import dungeon.Location;
 import dungeon.Move;
@@ -6,12 +17,6 @@ import dungeon.Player;
 import dungeon.Treasure;
 import randomizer.GameRandomizer;
 import randomizer.Randomizer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Driver class that acts as controller for the Dungeon.
@@ -28,13 +33,14 @@ public class Driver {
     int columns = 0;
     int interconnectivity = 0;
     int treasurePercentage = 0;
+    int numberOfMonsters = 0;
     try {
       rows = Integer.parseInt(args[0]);
       columns = Integer.parseInt(args[1]);
       interconnectivity = Integer.parseInt(args[3]);
       treasurePercentage = Integer.parseInt(args[4]);
-    }
-    catch (NumberFormatException e) {
+      numberOfMonsters = Integer.parseInt(args[5]);
+    } catch (NumberFormatException e) {
       System.out.println(
               "Rows, Columns, Interconnectivity, Treasure Percentage have to be Integers");
     }
@@ -45,19 +51,20 @@ public class Driver {
       System.exit(0);
     }
     boolean traverseAllNodes = false;
-    if (args.length > 5) {
-      if (!(args[5].equalsIgnoreCase("true")
-              || args[5].equalsIgnoreCase("false"))) {
+    if (args.length > 6) {
+      if (!(args[6].equalsIgnoreCase("true")
+              || args[6].equalsIgnoreCase("false"))) {
         System.out.println(
                 "Traverse all node has to be true or false");
         System.exit(0);
       }
-      traverseAllNodes = Boolean.parseBoolean(args[5]);
+      traverseAllNodes = Boolean.parseBoolean(args[6]);
     }
     boolean wrapped = Boolean.parseBoolean(args[2]);
     Randomizer randomizer = new GameRandomizer();
     Dungeon dungeon = new DungeonModel(
-            rows,columns,wrapped,interconnectivity,treasurePercentage, randomizer);
+            rows, columns, wrapped, interconnectivity, treasurePercentage, numberOfMonsters,
+            randomizer);
     Boolean[][] visitedGrid = initiateVisitGrid(rows, columns);
     int caves = getAllCaves(dungeon.getMaze()).size();
     System.out.println("Number of caves: " + caves);
@@ -69,19 +76,16 @@ public class Driver {
       numberOfNodesToFillTreasure = 1;
     }
     System.out.println("Treasure filled caves: " + numberOfNodesToFillTreasure);
-    if (traverseAllNodes) {
-      System.out.println(visualizeVisitedGrid(visitedGrid));
-      traverseAllNodes(visitedGrid, dungeon);
-
-      findEndNode(dungeon);
-    }
-    else {
-      findEndNode(dungeon);
-    }
     System.out.println(printLegend());
     System.out.println(visualizeKruskals(dungeon));
-    if (traverseAllNodes) {
-      System.out.println(visualizeVisitedGrid(visitedGrid));
+    DungeonController controller = new DungeonConsoleController(dungeon,
+            new InputStreamReader(System.in),
+            System.out);
+    try {
+      controller.play();
+    }
+    catch (IOException ioe) {
+      System.out.println(ioe.getMessage());
     }
   }
 
@@ -94,7 +98,7 @@ public class Driver {
     return sb.toString();
   }
 
-  private static void traverseAllNodes(Boolean[][] visitedGrid,Dungeon dungeon) {
+  private static void traverseAllNodes(Boolean[][] visitedGrid, Dungeon dungeon) {
     while (!fullyTraversed(visitedGrid)) {
       System.out.println("\n\n");
       System.out.println(visualizeKruskals(dungeon));
@@ -108,7 +112,7 @@ public class Driver {
         dungeon.playerPickTreasure();
         System.out.println("Picking cave treasure");
       }
-      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableMoves());
+      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableDirections());
       Collections.shuffle(availableMoves);
       goNextMove(dungeon, playerCurrentLocation, availableMoves);
       System.out.println("New Location " + locationNodeSummary(dungeon.getPlayerCurrentLocation()));
@@ -127,7 +131,7 @@ public class Driver {
         dungeon.playerPickTreasure();
         System.out.println("Picking cave treasure");
       }
-      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableMoves());
+      List<Move> availableMoves = new ArrayList<>(dungeon.getAvailableDirections());
       Collections.shuffle(availableMoves);
       goNextMove(dungeon, playerCurrentLocation, availableMoves);
       System.out.println("New Location " + locationNodeSummary(dungeon.getPlayerCurrentLocation()));
@@ -158,7 +162,8 @@ public class Driver {
   private static void goNextMove(Dungeon dungeon, Location playerCurrentLocation,
                                  List<Move> availableMoves) {
     for (Move move : availableMoves) {
-      List<Integer> nextLocationRowsColumns = getNextLocation(move, dungeon);
+      List<Integer> nextLocationRowsColumns = getNextLocation(dungeon.getPlayerCurrentLocation(),
+              move, dungeon);
       Location nextLocation = getLocation(nextLocationRowsColumns.get(0),
               nextLocationRowsColumns.get(1), dungeon);
       if (!compareLocations(nextLocation, playerCurrentLocation)) {
@@ -244,16 +249,35 @@ public class Driver {
           sb.append("S");
         } else if (compareLocations(endLocation, locationNode)
                 && compareLocations(playerCurrentLocation, locationNode)) {
-          sb.append("*");
+          if (locationNode.hasMonster()) {
+            sb.append("M");
+          } else {
+            sb.append("*");
+          }
         } else if (compareLocations(playerCurrentLocation, locationNode)) {
           sb.append("P");
         } else if (compareLocations(endLocation, locationNode)) {
           sb.append("X");
         }
-        if (locationNode.hasTreasure()) {
+        /*if (locationNode.hasTreasure()) {
           sb.append("▲");
+        }*/
+        if (locationNode.hasMonster()) {
+          sb.append("M");
         } else {
-          sb.append("0");
+          switch (dungeon.getSmell(locationNode)) {
+            case NONE:
+              sb.append(0);
+              break;
+            case LESS:
+              sb.append(1);
+              break;
+            case MORE:
+              sb.append(2);
+              break;
+            default:
+              sb.append("N");
+          }
         }
         Set<Move> nextMoves = locationNode.getNextMoves();
         if (nextMoves.contains(Move.WEST)) {
@@ -289,10 +313,10 @@ public class Driver {
     return dungeon.getMaze().get(x).get(y);
   }
 
-  private static List<Integer> getNextLocation(Move move, Dungeon dungeon)
+  private static List<Integer> getNextLocation(Location location, Move move, Dungeon dungeon)
           throws IllegalArgumentException, IllegalStateException {
-    int currentX = dungeon.getPlayerCurrentLocation().getRow();
-    int currentY = dungeon.getPlayerCurrentLocation().getColumn();
+    int currentX = location.getRow();
+    int currentY = location.getColumn();
     List<List<Location>> maze = dungeon.getMaze();
     List<Integer> coordinates = new ArrayList<>();
     switch (move) {
@@ -345,4 +369,100 @@ public class Driver {
   private static int getNumberOfTunnels(List<List<Location>> maze) {
     return maze.size() * maze.get(0).size() - getAllCaves(maze).size();
   }
+/*
+  private static int getSmell(Location location, Dungeon dungeon) {
+    System.out.println(location.getRow() + "," + location.getColumn());
+    int smell = 0;
+    Set<Move> nextMoves = location.getNextMoves();
+    System.out.println(nextMoves);
+    int count2PositionMonsters = 0;
+    for (Move move : nextMoves) {
+      List<Integer> nextLocationInts = getNextLocation(location, move, dungeon);
+      Location location1 = getLocation(nextLocationInts.get(0), nextLocationInts.get(1), dungeon);
+      System.out.println("Level 1 neighbors " + location1.getRow() + location1.getColumn());
+      System.out.println(location1.hasMonster());
+      if (location1.hasMonster()) {
+        System.out.println(count2PositionMonsters);
+        smell = 2;
+      }
+      System.out.println(smell);
+      Set<Move> nextMovesLevel2 = location1.getNextMoves();
+      for (Move nextMoveLeve2 : nextMovesLevel2) {
+        List<Integer> nextLocation2PositionInts = getNextLocation(location1, nextMoveLeve2,
+                dungeon);
+        Location location2 = getLocation(nextLocation2PositionInts.get(0),
+                nextLocation2PositionInts.get(1), dungeon);
+        System.out.println("Level 2 neighbors " + location2.getRow() + location1.getColumn());
+        System.out.println(location2.hasMonster());
+        if (location2.hasMonster()) {
+          count2PositionMonsters++;
+          if (smell < 2 && count2PositionMonsters > 1) {
+            smell = 2;
+          }
+          if (smell != 2) {
+            smell = 1;
+          }
+          System.out.println(count2PositionMonsters);
+          System.out.println(smell);
+        }
+      }
+    }
+    System.out.println("HERRR " + smell);
+    return smell;
+  }
+
+  private static boolean shootArrow(Move direction, int arrowDistance, Dungeon dungeon)
+          throws IllegalArgumentException {
+    if (arrowDistance <= 0 || arrowDistance > 5) {
+      throw new IllegalArgumentException("Distance cannot be less than 1 or greater than 5");
+    }
+    boolean hit = false;
+    int distance = arrowDistance;
+    Location arrowCurrentLocation = dungeon.getPlayerCurrentLocation();
+    System.out.println("Start Arrow loaction " + arrowCurrentLocation.getRow() + ", "
+            + arrowCurrentLocation.getColumn());
+    System.out.println(arrowCurrentLocation.getNextMoves());
+    //TODO validate move throw exception using existing function
+    Move travelDirection = direction;
+    while (distance > 0) {
+      System.out.println("Distance " + distance);
+      System.out.println("Direction " + travelDirection);
+      System.out.println("Current Arrow loaction " + arrowCurrentLocation.getRow() + ", "
+              + arrowCurrentLocation.getColumn());
+      Set<Move> nextMoves = arrowCurrentLocation.getNextMoves();
+      System.out.println(nextMoves);
+      System.out.println("Direction contains " + nextMoves.contains(travelDirection));
+      if (nextMoves.contains(travelDirection)) {
+        List<Integer> arrowNextLocation =
+                getNextLocation(arrowCurrentLocation, travelDirection, dungeon);
+        System.out.println(arrowNextLocation);
+        arrowCurrentLocation =
+                getLocation(arrowNextLocation.get(0), arrowNextLocation.get(1), dungeon);
+        System.out.println("NExt moves " + nextMoves.size());
+      } else {
+        if (nextMoves.size() == 2) {
+          System.out.println("Remove successful " + nextMoves.remove(travelDirection.getOpposite()));
+          travelDirection = nextMoves.iterator().next();
+          System.out.println("directionupdate " + travelDirection);
+          List<Integer> arrowNextLocation =
+                  getNextLocation(arrowCurrentLocation, travelDirection, dungeon);
+          arrowCurrentLocation =
+                  getLocation(arrowNextLocation.get(0), arrowNextLocation.get(1), dungeon);
+        } else {
+          distance = 0;
+        }
+      }
+      if (arrowCurrentLocation.getNextMoves().size() != 2) {
+        distance--;
+      }
+      System.out.println("Distance left " + distance);
+    }
+    if (arrowCurrentLocation.hasMonster() && distance == 0) {
+      hit = true;
+      //TODO hit monster
+    }
+    System.out.println("Arrow loaction " + arrowCurrentLocation.getRow() + ", "
+            + arrowCurrentLocation.getColumn());
+    return hit;
+  }*/
 }

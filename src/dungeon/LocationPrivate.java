@@ -9,4 +9,14 @@ interface LocationPrivate extends Location {
   void setTreasure(Treasure treasure, int randomTreasureQuantity);
 
   void pickTreasure(Treasure treasure, int randomTreasureQuantity);
+
+  Monster getMonster();
+
+  void setMonster();
+
+  void hitMonster();
+
+  int pickArrows() throws IllegalStateException;
+
+  void setArrows(int numberOfArrows);
 }
