@@ -16,7 +16,7 @@ public class MonsterTest {
 
   @Before
   public void setUp() {
-    urukhai = new UrukHai();
+    urukhai = new Otyugh();
   }
 
   @Test
