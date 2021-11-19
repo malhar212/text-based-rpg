@@ -6,7 +6,8 @@ import java.util.Locale;
  * Represents the commands available at a location.
  */
 public enum Commands {
-  MOVE("M"), PICKUP("P"), SHOOT("S"), QUIT("Q");
+  MOVE("M"), PICKUP("P"), SHOOT("S"), QUIT("Q"),
+  PICKARROWS("A"), PICKTREASURE("T");
 
   private final String shortHand;
 
@@ -44,6 +45,12 @@ public enum Commands {
       }
       case "Q": {
         return QUIT;
+      }
+      case "T": {
+        return PICKTREASURE;
+      }
+      case "A": {
+        return PICKARROWS;
       }
       default: {
         throw new IllegalArgumentException("No value for this shorthand");

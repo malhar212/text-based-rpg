@@ -165,7 +165,6 @@ public class DungeonModel implements Dungeon {
       Monster monster = nextLocation.getMonster();
       if (!monster.isDead() && monster.isInjured()) {
         int chance = randomizer.getRandomValue(0,1);
-        System.out.println("Random number " + chance);
         if (chance == 1) {
           this.isPlayerDead = true;
         }
@@ -508,7 +507,6 @@ public class DungeonModel implements Dungeon {
         hit = ArrowHitOutcome.INJURED;
       }
     }
-    System.out.println("Arrow destination " + arrowCurrentLocation.getRow() + ", " + arrowCurrentLocation.getColumn());
     return hit;
   }
 

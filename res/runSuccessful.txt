@@ -1,3 +1,4 @@
+Welcome to the dungeons
 You can input N for North, E for East, S for South, W for West
 You are in a cave,
 There are 3 arrows here
@@ -6,7 +7,37 @@ You can move in
 NORTH: N
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
-m
+p
+
+What to pick? Enter A for arrows or T for treasure
+A
+
+You have picked up 3 arrows
+Player has no treasure
+You have 6 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+P
+
+What to pick? Enter A for arrows or T for treasure
+A
+
+No arrows to pick
+Player has no treasure
+You have 6 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+P
+
+What to pick? Enter A for arrows or T for treasure
+T
+
+No treasure to pick
+Player has no treasure
+You have 6 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+M
 
 Where do we go?
 n
@@ -17,6 +48,16 @@ There are 3 arrows here
 You can move in
 NORTH: N
 SOUTH: S
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+p
+
+What to pick? Enter A for arrows or T for treasure
+a
+
+You have picked up 3 arrows
+Player has no treasure
+You have 9 arrows left
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 m
@@ -51,9 +92,12 @@ WEST: W
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 p
 
+What to pick? Enter A for arrows or T for treasure
+t
+
 You picked up 4 sapphires
 You now have the following treasure 4 sapphires
-You have 3 arrows left
+You have 9 arrows left
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 s
@@ -61,30 +105,18 @@ s
 Where do you want to shoot?
 w
 
-How far do you want to shoot?
+How far do you want to shoot? (1-5)
 1
-Arrow destination 4, 1
 
 You hear a painful roar in the distance. It seems your arrow hit an Otyugh
-You have 2 arrows left
-What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
-s
-
-Where do you want to shoot?
-w
-
-How far do you want to shoot?
-1
-Arrow destination 4, 1
-
-You hear a painful roar and wild thrashing in the darkness and then silence.It seems you've killed an Otyugh
-You have 1 arrow left
+You have 8 arrows left
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 m
 
 Where do we go?
 w
 
+There is an injured Otyugh resting. You have miraculously survived!!
 You are in a cave,
 There is a very strong rancid smell somewhere near
 There is treasure here
@@ -100,10 +132,22 @@ WEST: W
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 p
 
+What to pick? Enter A for arrows or T for treasure
+a
+
 You have picked up 3 arrows
+You now have the following treasure 4 sapphires
+You have 11 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+p
+
+What to pick? Enter A for arrows or T for treasure
+t
+
 You picked up 5 sapphires 5 diamonds
 You now have the following treasure 9 sapphires 5 diamonds
-You have 4 arrows left
+You have 11 arrows left
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 s
@@ -111,21 +155,28 @@ s
 Where do you want to shoot?
 w
 
-How far do you want to shoot?
+How far do you want to shoot? (1-5)
 1
-Arrow destination 4, 2
 
 You hear a painful roar in the distance. It seems your arrow hit an Otyugh
-You have 3 arrows left
+You have 10 arrows left
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+s
+
+Where do you want to shoot?
+w
+
+How far do you want to shoot? (1-5)
+1
+
+You hear a painful roar and wild thrashing in the darkness and then silence. It seems you've killed an Otyugh
+You have 9 arrows left
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 m
 
 Where do we go?
 w
-0
-Random number 0
 
-There is an injured Otyugh resting. You have miraculously survived!!
 You are in a cave,
 There is a very strong rancid smell somewhere near
 There are 3 arrows here
@@ -141,24 +192,22 @@ s
 Where do you want to shoot?
 n
 
-How far do you want to shoot?
+How far do you want to shoot? (1-5)
 1
-Arrow destination 3, 2
 
 You hear a painful roar in the distance. It seems your arrow hit an Otyugh
-You have 2 arrows left
+You have 8 arrows left
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 s
 
 Where do you want to shoot?
 n
 
-How far do you want to shoot?
+How far do you want to shoot? (1-5)
 1
-Arrow destination 3, 2
 
-You hear a painful roar and wild thrashing in the darkness and then silence.It seems you've killed an Otyugh
-You have 1 arrow left
+You hear a painful roar and wild thrashing in the darkness and then silence. It seems you've killed an Otyugh
+You have 7 arrows left
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 m
 

@@ -50,7 +50,8 @@ public class DungeonConsoleController implements DungeonController {
       throw new IllegalArgumentException("Please provide valid model");
     }
     Scanner scanner = new Scanner(readable);
-    appendable.append("You can input N for North, E for East, S for South, W for West");
+    appendable.append("Welcome to the dungeons");
+    appendable.append("\nYou can input N for North, E for East, S for South, W for West");
     while (!model.isGameOver()) {
       Location playerCurrentLocation = model.getPlayerCurrentLocation();
       Set<Commands> commandsList = new LinkedHashSet<>();
@@ -101,19 +102,19 @@ public class DungeonConsoleController implements DungeonController {
         appendable.append(move.getFullForm()).append(": ").append(move.getShortForm()).append(
                 "\n");
       }
-      Commands command = null;
+      Commands commands = null;
       commandsList.add(Commands.QUIT);
-      while (command != Commands.MOVE) {
+      while (commands != Commands.MOVE) {
         appendable.append("\nWhat do you want to do?");
         printCommandList(commandsList);
         String commandInput = scanner.next();
         try {
-          command = Commands.getByShortHand(commandInput);
-          if (!commandsList.contains(command)) {
-            command = null;
+          commands = Commands.getByShortHand(commandInput);
+          if (!commandsList.contains(commands)) {
+            commands = null;
           }
-          if (command != null) {
-            switch (command) {
+          if (commands != null) {
+            switch (commands) {
               case MOVE: {
                 Move direction = null;
                 while (direction == null) {
@@ -130,35 +131,54 @@ public class DungeonConsoleController implements DungeonController {
                 break;
               }
               case PICKUP: {
-                if (playerCurrentLocation.hasArrows()) {
-                  try {
-                    int arrows = playerCurrentLocation.getArrows();
-                    model.playerPickArrows();
-                    appendable.append("\nYou have picked up ").append(String.valueOf(arrows));
-                    if (arrows > 1) {
-                      appendable.append(" arrows");
+                Commands itemCommand = null;
+                while (itemCommand == null) {
+                  appendable.append("\nWhat to pick? Enter A for arrows or T for treasure\n");
+                  String nextCommand = scanner.next();
+                  itemCommand = Commands.getByShortHand(nextCommand);
+                  if (!itemCommand.equals(Commands.PICKARROWS)
+                          && !itemCommand.equals(Commands.PICKTREASURE)) {
+                    itemCommand = null;
+                  }
+                }
+                switch (itemCommand) {
+                  case PICKARROWS: {
+                    if (playerCurrentLocation.hasArrows()) {
+                      try {
+                        int arrows = playerCurrentLocation.getArrows();
+                        model.playerPickArrows();
+                        appendable.append("\nYou have picked up ").append(String.valueOf(arrows));
+                        if (arrows > 1) {
+                          appendable.append(" arrows");
+                        } else {
+                          appendable.append(" arrow");
+                        }
+                      } catch (IllegalStateException ise) {
+                        appendable.append("\nNo arrows to pick");
+                      }
                     } else {
-                      appendable.append(" arrow");
+                      appendable.append("\nNo arrows to pick");
                     }
-                  } catch (IllegalStateException ise) {
-                    appendable.append("\nNo arrows to pick");
+                    break;
                   }
-                }
-                else {
-                  appendable.append("\nNo arrows to pick");
-                }
-                if (playerCurrentLocation.hasTreasure()) {
-                  try {
-                    Map<Treasure, Integer> treasure = playerCurrentLocation.getTreasure();
-                    model.playerPickTreasure();
-                    appendable.append("\nYou picked up");
-                    printTreasures(treasure);
-                  } catch (IllegalStateException ise) {
-                    appendable.append("\nNo treasure to pick");
+                  case PICKTREASURE: {
+                    if (playerCurrentLocation.hasTreasure()) {
+                      try {
+                        Map<Treasure, Integer> treasure = playerCurrentLocation.getTreasure();
+                        model.playerPickTreasure();
+                        appendable.append("\nYou picked up");
+                        printTreasures(treasure);
+                      } catch (IllegalStateException ise) {
+                        appendable.append("\nNo treasure to pick");
+                      }
+                    } else {
+                      appendable.append("\nNo treasure to pick");
+                    }
+                    break;
                   }
-                }
-                else {
-                  appendable.append("\nNo treasure to pick");
+                  default: {
+                    appendable.append("Invalid choice to pick");
+                  }
                 }
                 printPlayerDescription(model.getPlayerDescription());
                 break;
@@ -172,15 +192,20 @@ public class DungeonConsoleController implements DungeonController {
                     direction = getDirection(nextMove);
                   }
                   Integer arrowDistance = null;
+                  ArrowHitOutcome arrowHit = ArrowHitOutcome.MISS;
                   while (arrowDistance == null) {
                     try {
-                      appendable.append("\nHow far do you want to shoot?\n");
-                      arrowDistance = scanner.nextInt();
-                    } catch (InputMismatchException ime) {
+                      appendable.append("\nHow far do you want to shoot? (1-5)\n");
+                      arrowDistance = Integer.parseInt(scanner.next());
+                      arrowHit = model.shootArrow(direction, arrowDistance);
+                    } catch (NumberFormatException ime) {
                       appendable.append("\nPlease enter a valid distance as an integer\n");
+                    } catch (IllegalArgumentException iae) {
+                      appendable.append("\nPlease enter a valid distance between 1-5 as an "
+                              + "input\n");
+                      arrowDistance = null;
                     }
                   }
-                  ArrowHitOutcome arrowHit = model.shootArrow(direction, arrowDistance);
                   switch (arrowHit) {
                     case MISS: {
                       appendable
@@ -229,7 +254,7 @@ public class DungeonConsoleController implements DungeonController {
                 break;
               }
               default: {
-                appendable.append("\nYour command is invalid");
+                appendable.append("\nYour commands is invalid");
               }
             }
           }

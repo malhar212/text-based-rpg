@@ -1,17 +1,36 @@
+Welcome to the dungeons
 You can input N for North, E for East, S for South, W for West
 You are in a cave,
-There are 3 arrows here
-
+There is a rancid smell somewhere near
+There is treasure here
+You find 2 diamonds 1 ruby 3 sapphires
 You can move in
 NORTH: N
+SOUTH: S
+EAST: E
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+M
+
+Where do we go?
+N
+
+You are in a cave,
+There are 2 arrows here
+
+You can move in
+SOUTH: S
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 p
 
-You have picked up 3 arrows
-No treasure to pick
+What to pick? Enter A for arrows or T for treasure
+a
+
+You have picked up 2 arrows
 Player has no treasure
-You have 6 arrows left
+You have 5 arrows left
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 m
@@ -19,35 +38,48 @@ m
 Where do we go?
 n
 
-You are in a tunnel,
-There are 3 arrows here
+Please choose one of the valid commands MOVE: M SHOOT: S PICKUP: P QUIT: Q
 
+You are in a cave,
 You can move in
-NORTH: N
 SOUTH: S
 
-What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+What do you want to do? MOVE: M SHOOT: S QUIT: Q
+s
+
+Where do you want to shoot?
+s
+
+How far do you want to shoot? (1-5)
+3
+
+Your arrow goes whistling through the dungeon and there's a clunk as it falls to the ground after hitting a cave wall
+You have 4 arrows left
+What do you want to do? MOVE: M SHOOT: S QUIT: Q
 m
 
 Where do we go?
-n
+s
 
 You are in a cave,
 There is a rancid smell somewhere near
 There is treasure here
-You find 5 diamonds
+You find 2 diamonds 1 ruby 3 sapphires
 You can move in
 NORTH: N
 SOUTH: S
+EAST: E
 WEST: W
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 p
 
-No arrows to pick
-You picked up 5 diamonds
-You now have the following treasure 5 diamonds
-You have 6 arrows left
+What to pick? Enter A for arrows or T for treasure
+t
+
+You picked up 2 diamonds 1 ruby 3 sapphires
+You now have the following treasure 2 diamonds 1 ruby 3 sapphires
+You have 4 arrows left
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 m
@@ -55,40 +87,33 @@ m
 Where do we go?
 w
 
-You are in a cave,
-There is a very strong rancid smell somewhere near
-There is treasure here
-You find 4 sapphires
+You are in a tunnel,
 You can move in
 NORTH: N
 EAST: E
-WEST: W
 
-What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
-S
-
-Where do you want to shoot?
-w
-
-How far do you want to shoot?
-1
-Arrow destination 4, 1
-
-You hear a painful roar in the distance. It seems your arrow hit an Otyugh
-You have 5 arrows left
-What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+What do you want to do? MOVE: M SHOOT: S QUIT: Q
 m
 
 Where do we go?
-w
-0
-Random number 0
+e
 
-There is an injured Otyugh resting. You have miraculously survived!!
 You are in a cave,
-There is a very strong rancid smell somewhere near
-There is treasure here
-You find 5 sapphires 5 diamonds
+There is a rancid smell somewhere near
+You can move in
+NORTH: N
+SOUTH: S
+EAST: E
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S QUIT: Q
+m
+
+Where do we go?
+e
+
+You are in a cave,
+There is a rancid smell somewhere near
 There are 3 arrows here
 
 You can move in
@@ -100,16 +125,73 @@ WEST: W
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 p
 
+What to pick? Enter A for arrows or T for treasure
+A
+
 You have picked up 3 arrows
-You picked up 5 sapphires 5 diamonds
-You now have the following treasure 5 sapphires 10 diamonds
-You have 8 arrows left
+You now have the following treasure 2 diamonds 1 ruby 3 sapphires
+You have 7 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+e
+
+You are in a cave,
+There is treasure here
+You find 2 diamonds 3 rubies 4 sapphires
+There are 3 arrows here
+
+You can move in
+WEST: W
 
 What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
 m
 
 Where do we go?
 w
+
+You are in a cave,
+There is a rancid smell somewhere near
+You can move in
+NORTH: N
+SOUTH: S
+EAST: E
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S QUIT: Q
+M
+
+Where do we go?
+s
+
+You are in a tunnel,
+There is a rancid smell somewhere near
+There are 3 arrows here
+
+You can move in
+NORTH: N
+SOUTH: S
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+
+m
+
+Where do we go?
+s
+
+You are in a tunnel,
+There is a very strong rancid smell somewhere near
+You can move in
+NORTH: N
+SOUTH: S
+
+What do you want to do? MOVE: M SHOOT: S QUIT: Q
+m
+
+Where do we go?
+s
 
 You were killed. You died a gruesome death at the hands of the Otyugh
 Process finished with exit code 0
