@@ -14,5 +14,6 @@ public interface DungeonController {
    * @throws IOException if an I/O error occurs.
    * @throws IllegalArgumentException if the given model is null.
    */
+  //TODO model field or not/update diagram/Update readme
   void play(Dungeon model) throws IOException, IllegalArgumentException;
 }

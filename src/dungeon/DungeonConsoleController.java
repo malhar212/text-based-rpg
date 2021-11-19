@@ -114,6 +114,7 @@ public class DungeonConsoleController implements DungeonController {
             commands = null;
           }
           if (commands != null) {
+            Command executableCommand = null;
             switch (commands) {
               case MOVE: {
                 Move direction = null;
@@ -122,6 +123,7 @@ public class DungeonConsoleController implements DungeonController {
                   String nextMove = scanner.next();
                   direction = getDirection(nextMove);
                 }
+                executableCommand = new MoveCommand(direction);
                 model.movePlayer(direction);
                 Location newPlayerLocation = model.getPlayerCurrentLocation();
                 if (newPlayerLocation.hasMonster() && !model.isPlayerDead()) {
@@ -143,35 +145,27 @@ public class DungeonConsoleController implements DungeonController {
                 }
                 switch (itemCommand) {
                   case PICKARROWS: {
-                    if (playerCurrentLocation.hasArrows()) {
-                      try {
-                        int arrows = playerCurrentLocation.getArrows();
-                        model.playerPickArrows();
-                        appendable.append("\nYou have picked up ").append(String.valueOf(arrows));
-                        if (arrows > 1) {
-                          appendable.append(" arrows");
-                        } else {
-                          appendable.append(" arrow");
-                        }
-                      } catch (IllegalStateException ise) {
-                        appendable.append("\nNo arrows to pick");
+                    try {
+                      int arrows = playerCurrentLocation.getArrows();
+                      model.playerPickArrows();
+                      appendable.append("\nYou have picked up ").append(String.valueOf(arrows));
+                      if (arrows > 1) {
+                        appendable.append(" arrows");
+                      } else {
+                        appendable.append(" arrow");
                       }
-                    } else {
+                    } catch (IllegalStateException ise) {
                       appendable.append("\nNo arrows to pick");
                     }
                     break;
                   }
                   case PICKTREASURE: {
-                    if (playerCurrentLocation.hasTreasure()) {
-                      try {
-                        Map<Treasure, Integer> treasure = playerCurrentLocation.getTreasure();
-                        model.playerPickTreasure();
-                        appendable.append("\nYou picked up");
-                        printTreasures(treasure);
-                      } catch (IllegalStateException ise) {
-                        appendable.append("\nNo treasure to pick");
-                      }
-                    } else {
+                    try {
+                      Map<Treasure, Integer> treasure = playerCurrentLocation.getTreasure();
+                      model.playerPickTreasure();
+                      appendable.append("\nYou picked up");
+                      printTreasures(treasure);
+                    } catch (IllegalStateException ise) {
                       appendable.append("\nNo treasure to pick");
                     }
                     break;
@@ -184,69 +178,64 @@ public class DungeonConsoleController implements DungeonController {
                 break;
               }
               case SHOOT: {
-                if (model.getPlayerDescription().hasArrows()) {
-                  Move direction = null;
-                  while (direction == null) {
-                    appendable.append("\nWhere do you want to shoot?\n");
-                    String nextMove = scanner.next();
-                    direction = getDirection(nextMove);
-                  }
-                  Integer arrowDistance = null;
-                  ArrowHitOutcome arrowHit = ArrowHitOutcome.MISS;
-                  while (arrowDistance == null) {
-                    try {
-                      appendable.append("\nHow far do you want to shoot? (1-5)\n");
-                      arrowDistance = Integer.parseInt(scanner.next());
-                      arrowHit = model.shootArrow(direction, arrowDistance);
-                    } catch (NumberFormatException ime) {
-                      appendable.append("\nPlease enter a valid distance as an integer\n");
-                    } catch (IllegalArgumentException iae) {
-                      appendable.append("\nPlease enter a valid distance between 1-5 as an "
-                              + "input\n");
-                      arrowDistance = null;
-                    }
-                  }
-                  switch (arrowHit) {
-                    case MISS: {
-                      appendable
-                              .append("\nYour arrow goes whistling through the dungeon "
-                                      + "and there's a clunk "
-                                      + "as it falls to the ground after hitting a cave wall");
-                      break;
-                    }
-                    case INJURED: {
-                      appendable
-                              .append("\nYou hear a painful roar in the distance. "
-                                      + "It seems your arrow hit an Otyugh");
-                      break;
-                    }
-                    case KILLED: {
-                      appendable
-                              .append("\nYou hear a painful roar and wild thrashing in the "
-                                      + "darkness and then silence. "
-                                      + "It seems you've killed an Otyugh");
-                      break;
-                    }
-                    default: {
-                      appendable
-                              .append("\nYour arrow goes whistling through the dungeon "
-                                      + "and there's a clunk "
-                                      + "as it falls to the ground after hitting a cave wall");
-                    }
-                  }
-                  int remainingArrows = model.getPlayerDescription().getArrows();
-                  if (remainingArrows == 0) {
-                    appendable.append("\nYou have no arrows remaining");
-                  } else if (remainingArrows == 1) {
-                    appendable.append("\nYou have ").append(String.valueOf(remainingArrows))
-                            .append(" arrow left");
-                  } else {
-                    appendable.append("\nYou have ").append(String.valueOf(remainingArrows))
-                            .append(" arrows left");
-                  }
-                  break;
+                Move direction = null;
+                while (direction == null) {
+                  appendable.append("\nWhere do you want to shoot?\n");
+                  String nextMove = scanner.next();
+                  direction = getDirection(nextMove);
                 }
-                appendable.append("\nYou have no arrows to shoot");
+                Integer arrowDistance = null;
+                ArrowHitOutcome arrowHit = ArrowHitOutcome.MISS;
+                while (arrowDistance == null) {
+                  try {
+                    appendable.append("\nHow far do you want to shoot? (1-5)\n");
+                    arrowDistance = Integer.parseInt(scanner.next());
+                    arrowHit = model.shootArrow(direction, arrowDistance);
+                  } catch (NumberFormatException ime) {
+                    appendable.append("\nPlease enter a valid distance as an integer\n");
+                  } catch (IllegalArgumentException iae) {
+                    appendable.append(iae.getMessage());
+                    arrowDistance = null;
+                  }
+                }
+                switch (arrowHit) {
+                  case MISS: {
+                    appendable
+                            .append("\nYour arrow goes whistling through the dungeon "
+                                    + "and there's a clunk "
+                                    + "as it falls to the ground after hitting a cave wall");
+                    break;
+                  }
+                  case INJURED: {
+                    appendable
+                            .append("\nYou hear a painful roar in the distance. "
+                                    + "It seems your arrow hit an Otyugh");
+                    break;
+                  }
+                  case KILLED: {
+                    appendable
+                            .append("\nYou hear a painful roar and wild thrashing in the "
+                                    + "darkness and then silence. "
+                                    + "It seems you've killed an Otyugh");
+                    break;
+                  }
+                  default: {
+                    appendable
+                            .append("\nYour arrow goes whistling through the dungeon "
+                                    + "and there's a clunk "
+                                    + "as it falls to the ground after hitting a cave wall");
+                  }
+                }
+                int remainingArrows = model.getPlayerDescription().getArrows();
+                if (remainingArrows == 0) {
+                  appendable.append("\nYou have no arrows remaining");
+                } else if (remainingArrows == 1) {
+                  appendable.append("\nYou have ").append(String.valueOf(remainingArrows))
+                          .append(" arrow left");
+                } else {
+                  appendable.append("\nYou have ").append(String.valueOf(remainingArrows))
+                          .append(" arrows left");
+                }
                 break;
               }
               case QUIT: {
@@ -254,12 +243,12 @@ public class DungeonConsoleController implements DungeonController {
                 break;
               }
               default: {
-                appendable.append("\nYour commands is invalid");
+                appendable.append("\nYour command is invalid");
               }
             }
+            //executableCommand.execute();
           }
         } catch (IllegalArgumentException iae) {
-          //do nothing
           appendable.append("\nPlease choose one of the valid commands");
           printCommandList(commandsList);
         }

@@ -239,20 +239,21 @@ You collected these treasures on your journey SAPPHIRES: 9 DIAMONDS: 5
 
 ##Design Changes
 The following changes were made to the previous design: 
-1. Added class Randomizer interface.
-2. Added PlayerPrivate interface to keep object mutating code internal to the package.
-3. Added class Edge to help in generation of maze in the Dungeon class.
-4. Some changes to method names and return types.
+1. Added Command Pattern related interface and classes.//TODO
+2. Added enum Commands for easier validation all command to be taken from user input.
+3. Added enum ArrowHitOutcome.
+4. Some changes to method name and return types.
 
 ##Assumptions
-The following assumptions were made: 
-1. Running the game and moving player is the responsibility of the controller in this case the Driver class.
-2. After visiting end node the controller can still freely move player.
-3. Player is instantiated inside Dungeon model.
+The following assumptions were made:
+1. Player is instantiated inside Dungeon model.
+2. On pickup command all items of a type will be picked up.
+3. Arrows can only be fired at a distance of 1-5.
 
 ##Limitations
 1. Players cannot set their player names due to requirement of the project.
 2. Next location cannot be fetched without moving to that location.
+3. Arrows can only be fired at a distance of 1-5.
 
 ##Citations
 1. [Random number generation between range](https://www.delftstack.com/howto/java/java-random-number-in-range/)
