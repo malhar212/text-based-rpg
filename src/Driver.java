@@ -1,3 +1,4 @@
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Driver {
    *
    * @param args Arguments to the main method.
    */
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     int rows = 0;
     int columns = 0;
     int interconnectivity = 0;
@@ -42,7 +43,9 @@ public class Driver {
       numberOfMonsters = Integer.parseInt(args[5]);
     } catch (NumberFormatException e) {
       System.out.println(
-              "Rows, Columns, Interconnectivity, Treasure Percentage have to be Integers");
+              "Rows, Columns, Interconnectivity, Treasure Percentage, Number of monsters have to "
+                      + "be Integers");
+      System.exit(0);
     }
     if (!(args[2].equalsIgnoreCase("true")
             || args[2].equalsIgnoreCase("false"))) {
@@ -50,7 +53,7 @@ public class Driver {
               "Wrapped has to be true or false");
       System.exit(0);
     }
-    boolean traverseAllNodes = false;
+/*    boolean traverseAllNodes = false;
     if (args.length > 6) {
       if (!(args[6].equalsIgnoreCase("true")
               || args[6].equalsIgnoreCase("false"))) {
@@ -59,30 +62,29 @@ public class Driver {
         System.exit(0);
       }
       traverseAllNodes = Boolean.parseBoolean(args[6]);
-    }
+    }*/
     boolean wrapped = Boolean.parseBoolean(args[2]);
-    Randomizer randomizer = new GameRandomizer();
+    Randomizer randomizer = new GameRandomizer(28, 33, 23, 29, 6, 23, 27, 24, 27, 7, 14, 4, 7, 2, 14, 23, 1, 11, 5, 16, 5, 3, 14, 5, 8, 13, 10, 11, 11, 8, 6, 2, 5, 1, 3, 4, 3, 2, 0, 0, 4, 8, 4, 6, 12, 1, 0, 5, 2, 3, 1, 2, 0, 3, 0, 4, 9, 2, 0, 5, 0, 5, 7, 1, 1, 3, 1, 1, 1, 4, 4, 1, 1, 5, 5, 1, 1, 4, 3, 3, 9, 1, 13, 2, 5, 2, 4, 2, 13, 3, 7, 1, 11, 3, 4, 3, 5, 3, 3, 1, 11, 10, 0);
     Dungeon dungeon = new DungeonModel(
             rows, columns, wrapped, interconnectivity, treasurePercentage, numberOfMonsters,
             randomizer);
-    Boolean[][] visitedGrid = initiateVisitGrid(rows, columns);
-    int caves = getAllCaves(dungeon.getMaze()).size();
-    System.out.println("Number of caves: " + caves);
-    System.out.println("Number of tunnels: " + getNumberOfTunnels(dungeon.getMaze()));
-    double percentage = treasurePercentage / 100.00;
-    int numberOfNodesToFillTreasure = Double.valueOf(
+    //Boolean[][] visitedGrid = initiateVisitGrid(rows, columns);
+    //int caves = getAllCaves(dungeon.getMaze()).size();
+    //System.out.println("Number of caves: " + caves);
+    //System.out.println("Number of tunnels: " + getNumberOfTunnels(dungeon.getMaze()));
+    //double percentage = treasurePercentage / 100.00;
+    /*int numberOfNodesToFillTreasure = Double.valueOf(
             Math.round(percentage * caves)).intValue();
     if (numberOfNodesToFillTreasure == 0) {
       numberOfNodesToFillTreasure = 1;
-    }
-    System.out.println("Treasure filled caves: " + numberOfNodesToFillTreasure);
-    System.out.println(printLegend());
+    }*/
+    //System.out.println("Treasure filled caves: " + numberOfNodesToFillTreasure);
+    /*System.out.println(printLegend());*/
     System.out.println(visualizeKruskals(dungeon));
-    DungeonController controller = new DungeonConsoleController(dungeon,
-            new InputStreamReader(System.in),
-            System.out);
+    DungeonController controller = new DungeonConsoleController(
+            new InputStreamReader(System.in), System.out);
     try {
-      controller.play();
+      controller.play(dungeon);
     }
     catch (IOException ioe) {
       System.out.println(ioe.getMessage());
