@@ -4,26 +4,51 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * Represents a controller that allows user ability to manipulate the player in the dungeon game.
+ */
 public class DungeonConsoleController implements DungeonController {
 
-  private final Dungeon model;
   private final Readable readable;
   private final Appendable appendable;
 
-  public DungeonConsoleController(Dungeon dungeonModel, Readable readable, Appendable appendable) {
-    //TODO Null check
-    this.model = dungeonModel;
+  /**
+   * Creates a new instance of DungeonConsoleController.
+   *
+   * @param readable     the input readable.
+   * @param appendable   the output appendable.
+   * @throws IllegalArgumentException if any of the given parameters are null.
+   */
+  public DungeonConsoleController(Readable readable, Appendable appendable)
+          throws IllegalArgumentException {
+    if (readable == null || appendable == null) {
+      throw new IllegalArgumentException("Please provide valid parameters to the controller");
+    }
     this.readable = readable;
     this.appendable = appendable;
   }
 
+  private static boolean compareLocations(Location locationA, Location locationB) {
+    return locationA.getRow() == locationB.getRow()
+            && locationA.getColumn() == locationB.getColumn();
+  }
+
+  /**
+   * Starts the run of a dungeon game.
+   *
+   * @param model the model of the dungeon game.
+   * @throws IOException if an I/O error occurs.
+   * @throws IllegalArgumentException if the given model is null.
+   */
   @Override
-  public void play() throws IOException {
+  public void play(Dungeon model) throws IOException, IllegalArgumentException {
+    if (model == null) {
+      throw new IllegalArgumentException("Please provide valid model");
+    }
     Scanner scanner = new Scanner(readable);
     appendable.append("You can input N for North, E for East, S for South, W for West");
     while (!model.isGameOver()) {
@@ -37,10 +62,6 @@ public class DungeonConsoleController implements DungeonController {
         appendable.append("\nYou are in a cave,");
       } else {
         appendable.append("\nYou are in a tunnel,");
-      }
-      if (playerCurrentLocation.hasMonster()) {
-        appendable.append(" there is an injured Uruk Hai resting. You have miraculously "
-                + "survived!!");
       }
       SmellLevel smell = model.getSmell(playerCurrentLocation);
       switch (smell) {
@@ -81,12 +102,13 @@ public class DungeonConsoleController implements DungeonController {
                 "\n");
       }
       Commands command = null;
+      commandsList.add(Commands.QUIT);
       while (command != Commands.MOVE) {
         appendable.append("\nWhat do you want to do?");
         printCommandList(commandsList);
         String commandInput = scanner.next();
         try {
-          command = Commands.getByShortHand(commandInput.toUpperCase());
+          command = Commands.getByShortHand(commandInput);
           if (!commandsList.contains(command)) {
             command = null;
           }
@@ -100,6 +122,11 @@ public class DungeonConsoleController implements DungeonController {
                   direction = getDirection(nextMove);
                 }
                 model.movePlayer(direction);
+                Location newPlayerLocation = model.getPlayerCurrentLocation();
+                if (newPlayerLocation.hasMonster() && !model.isPlayerDead()) {
+                  appendable.append("\nThere is an injured Otyugh resting. You have miraculously "
+                          + "survived!!");
+                }
                 break;
               }
               case PICKUP: {
@@ -117,6 +144,9 @@ public class DungeonConsoleController implements DungeonController {
                     appendable.append("\nNo arrows to pick");
                   }
                 }
+                else {
+                  appendable.append("\nNo arrows to pick");
+                }
                 if (playerCurrentLocation.hasTreasure()) {
                   try {
                     Map<Treasure, Integer> treasure = playerCurrentLocation.getTreasure();
@@ -127,6 +157,10 @@ public class DungeonConsoleController implements DungeonController {
                     appendable.append("\nNo treasure to pick");
                   }
                 }
+                else {
+                  appendable.append("\nNo treasure to pick");
+                }
+                printPlayerDescription(model.getPlayerDescription());
                 break;
               }
               case SHOOT: {
@@ -146,15 +180,34 @@ public class DungeonConsoleController implements DungeonController {
                       appendable.append("\nPlease enter a valid distance as an integer\n");
                     }
                   }
-                  boolean arrowHit = model.shootArrow(direction, arrowDistance);
-                  if (arrowHit) {
-                    appendable
-                            .append("\nYou hear a painful roar in the distance. It seems your arrow hit "
-                                    + "an Uruk Hai");
-                  } else {
-                    appendable
-                            .append("\nYour arrow goes whistling through the dungeon and there's a clunk "
-                                    + "as it falls to the ground after hitting a cave wall");
+                  ArrowHitOutcome arrowHit = model.shootArrow(direction, arrowDistance);
+                  switch (arrowHit) {
+                    case MISS: {
+                      appendable
+                              .append("\nYour arrow goes whistling through the dungeon "
+                                      + "and there's a clunk "
+                                      + "as it falls to the ground after hitting a cave wall");
+                      break;
+                    }
+                    case INJURED: {
+                      appendable
+                              .append("\nYou hear a painful roar in the distance. "
+                                      + "It seems your arrow hit an Otyugh");
+                      break;
+                    }
+                    case KILLED: {
+                      appendable
+                              .append("\nYou hear a painful roar and wild thrashing in the "
+                                      + "darkness and then silence. "
+                                      + "It seems you've killed an Otyugh");
+                      break;
+                    }
+                    default: {
+                      appendable
+                              .append("\nYour arrow goes whistling through the dungeon "
+                                      + "and there's a clunk "
+                                      + "as it falls to the ground after hitting a cave wall");
+                    }
                   }
                   int remainingArrows = model.getPlayerDescription().getArrows();
                   if (remainingArrows == 0) {
@@ -171,6 +224,10 @@ public class DungeonConsoleController implements DungeonController {
                 appendable.append("\nYou have no arrows to shoot");
                 break;
               }
+              case QUIT: {
+                System.exit(0);
+                break;
+              }
               default: {
                 appendable.append("\nYour command is invalid");
               }
@@ -182,11 +239,10 @@ public class DungeonConsoleController implements DungeonController {
           printCommandList(commandsList);
         }
       }
-      visualizeKruskals(model);
+      //visualizeKruskals(model);
     }
     if (model.isPlayerDead()) {
-      appendable.append("\nYou were killed. You died a gruesome death at the hands of the Uruk "
-              + "Hai!");
+      appendable.append("\nYou were killed. You died a gruesome death at the hands of the Otyugh");
     }
     else if (model.playerVisitedEnd()) {
       appendable.append("\nYou have escaped the mines of Moria");
@@ -194,8 +250,9 @@ public class DungeonConsoleController implements DungeonController {
       if (playerDescription.hasTreasure()) {
         appendable.append("\nYou collected these treasures on your journey");
         Map<Treasure, Integer> treasures = playerDescription.getTreasure();
-        for (Treasure treasure: treasures.keySet()) {
-          appendable.append(" ").append(treasure.name()).append(": ").append(String.valueOf(treasures.get(treasure)));
+        for (Treasure treasure : treasures.keySet()) {
+          appendable.append(" ").append(treasure.name()).append(": ")
+                  .append(String.valueOf(treasures.get(treasure)));
         }
       }
     }
@@ -216,7 +273,7 @@ public class DungeonConsoleController implements DungeonController {
     }
     appendable.append("\n");
   }
-//TODO arrow distribut/ show available moves
+
   private Move getDirection(String nextMove) throws IOException {
     nextMove = nextMove.toUpperCase();
     Move direction = null;
@@ -345,9 +402,28 @@ public class DungeonConsoleController implements DungeonController {
     }
   }
 
-  private static boolean compareLocations(Location locationA, Location locationB) {
-    return locationA.getRow() == locationB.getRow()
-            && locationA.getColumn() == locationB.getColumn();
+  private void printPlayerDescription(Player player) throws IOException {
+    if (player.hasTreasure()) {
+      Map<Treasure, Integer> treasure = player.getTreasure();
+      appendable.append("\nYou now have the following treasure");
+      for (Treasure treasureItem : treasure.keySet()) {
+        Integer count = treasure.get(treasureItem);
+        appendable.append(" ").append(String.valueOf(count)).append(" ")
+                .append(getTreasureString(treasureItem, count));
+      }
+    } else {
+      appendable.append("\nPlayer has no treasure");
+    }
+    if (player.hasArrows()) {
+      int arrows = player.getArrows();
+      if (arrows > 1) {
+        appendable.append("\nYou have ").append(String.valueOf(arrows)).append(" arrows left\n");
+      } else {
+        appendable.append("\nYou have 1 arrow left\n");
+      }
+    } else {
+      appendable.append("\nPlayer has no arrows");
+    }
   }
 
 }
