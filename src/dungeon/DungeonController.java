@@ -2,7 +2,17 @@ package dungeon;
 
 import java.io.IOException;
 
+/**
+ * This serves as the controller for the player in the dungeon game.
+ */
 public interface DungeonController {
 
-  void play() throws IOException;
+  /**
+   * Starts the run of a dungeon game.
+   *
+   * @param model the model of the dungeon game.
+   * @throws IOException if an I/O error occurs.
+   * @throws IllegalArgumentException if the given model is null.
+   */
+  void play(Dungeon model) throws IOException, IllegalArgumentException;
 }
