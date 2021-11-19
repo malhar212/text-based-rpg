@@ -230,7 +230,7 @@ public final class LocationNode implements LocationPrivate {
   @Override
   public void setMonster() {
     if (monster == null) {
-      monster = new UrukHai();
+      monster = new Otyugh();
     }
   }
 
