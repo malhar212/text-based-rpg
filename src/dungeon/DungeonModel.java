@@ -233,14 +233,14 @@ public class DungeonModel implements Dungeon {
    *
    * @param direction the direction in which to fire the arrow.
    * @param arrowDistance the number of caves the arrow should traverse.
-   * @return true if a monster is successfully hit.
+   * @return ArrowHitOutcome value that represents whether monster is successfully hit.
    * @throws IllegalArgumentException if distance is less than 1 or greater than 5.
    * @throws IllegalArgumentException if an invalid direction is provided.
    * @throws IllegalStateException if player has no arrows to fire.
    */
   @Override
-  public boolean shootArrow(Move direction, int arrowDistance) throws IllegalArgumentException,
-          IllegalStateException {
+  public ArrowHitOutcome shootArrow(Move direction, int arrowDistance)
+          throws IllegalArgumentException, IllegalStateException {
     if (arrowDistance <= 0 || arrowDistance > 5) {
       throw new IllegalArgumentException("Distance cannot be less than 1 or greater than 5");
     }
@@ -460,7 +460,6 @@ public class DungeonModel implements Dungeon {
     }
   }
 
-  //TODO Test No monster at start
   private void fillUpMonsters(int numberOfMonsters, Randomizer randomizer) {
     List<LocationPrivate> allNodes = getAllCaves();
     LocationPrivate endNode = getLocation(endX, endY);
@@ -476,10 +475,10 @@ public class DungeonModel implements Dungeon {
     }
   }
 
-  private boolean fireArrowHelper(Move direction, int arrowDistance)
-          throws IllegalArgumentException {
+  private ArrowHitOutcome fireArrowHelper(Move direction, int arrowDistance)
+          throws IllegalArgumentException, IllegalStateException {
     player.fireArrow();
-    boolean hit = false;
+    ArrowHitOutcome hit = ArrowHitOutcome.MISS;
     int distance = arrowDistance;
     LocationPrivate arrowCurrentLocation = getLocation(currentX,currentY);
 
@@ -489,22 +488,27 @@ public class DungeonModel implements Dungeon {
       if (nextMoves.contains(travelDirection)) {
         arrowCurrentLocation = getNextLocation(arrowCurrentLocation, travelDirection);
       } else {
-        if (nextMoves.size() == 2) {
+        if (!arrowCurrentLocation.isCave()) {
           travelDirection = nextMoves.iterator().next();
           arrowCurrentLocation = getNextLocation(arrowCurrentLocation, travelDirection);
         } else {
           distance = 0;
         }
       }
-      if (arrowCurrentLocation.getNextMoves().size() != 2) {
+      if (arrowCurrentLocation.isCave()) {
         distance--;
       }
     }
     if (arrowCurrentLocation.hasMonster() && distance == 0) {
-      hit = true;
-      //TODO hit monster
       arrowCurrentLocation.hitMonster();
+      if (arrowCurrentLocation.getMonster().isDead()) {
+        hit = ArrowHitOutcome.KILLED;
+      }
+      else if (arrowCurrentLocation.getMonster().isInjured()) {
+        hit = ArrowHitOutcome.INJURED;
+      }
     }
+    System.out.println("Arrow destination " + arrowCurrentLocation.getRow() + ", " + arrowCurrentLocation.getColumn());
     return hit;
   }
 
@@ -682,6 +686,7 @@ public class DungeonModel implements Dungeon {
               + numberOfCaves);
     }
     fillUpTreasure(treasurePercentage, randomizer);
+    fillUpArrows(treasurePercentage, randomizer);
     generateStartEndNodes(randomizer);
     fillUpMonsters(numberOfMonsters,randomizer);
   }

@@ -93,11 +93,11 @@ public interface Dungeon {
    *
    * @param direction the direction in which to fire the arrow.
    * @param arrowDistance the number of caves the arrow should traverse.
-   * @return true if a monster is successfully hit.
+   * @return ArrowHitOutcome value that represents whether monster is successfully hit.
    * @throws IllegalArgumentException if distance is less than 1 or greater than 5.
    * @throws IllegalArgumentException if an invalid direction is provided.
    */
-  boolean shootArrow(Move direction, int arrowDistance);
+  ArrowHitOutcome shootArrow(Move direction, int arrowDistance);
 
   /**
    * Makes the player pick the arrows from the their current location.

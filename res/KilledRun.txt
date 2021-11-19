@@ -1,0 +1,115 @@
+You can input N for North, E for East, S for South, W for West
+You are in a cave,
+There are 3 arrows here
+
+You can move in
+NORTH: N
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+p
+
+You have picked up 3 arrows
+No treasure to pick
+Player has no treasure
+You have 6 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+n
+
+You are in a tunnel,
+There are 3 arrows here
+
+You can move in
+NORTH: N
+SOUTH: S
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+n
+
+You are in a cave,
+There is a rancid smell somewhere near
+There is treasure here
+You find 5 diamonds
+You can move in
+NORTH: N
+SOUTH: S
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+p
+
+No arrows to pick
+You picked up 5 diamonds
+You now have the following treasure 5 diamonds
+You have 6 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+w
+
+You are in a cave,
+There is a very strong rancid smell somewhere near
+There is treasure here
+You find 4 sapphires
+You can move in
+NORTH: N
+EAST: E
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+S
+
+Where do you want to shoot?
+w
+
+How far do you want to shoot?
+1
+Arrow destination 4, 1
+
+You hear a painful roar in the distance. It seems your arrow hit an Otyugh
+You have 5 arrows left
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+w
+0
+Random number 0
+
+There is an injured Otyugh resting. You have miraculously survived!!
+You are in a cave,
+There is a very strong rancid smell somewhere near
+There is treasure here
+You find 5 sapphires 5 diamonds
+There are 3 arrows here
+
+You can move in
+NORTH: N
+SOUTH: S
+EAST: E
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+p
+
+You have picked up 3 arrows
+You picked up 5 sapphires 5 diamonds
+You now have the following treasure 5 sapphires 10 diamonds
+You have 8 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+w
+
+You were killed. You died a gruesome death at the hands of the Otyugh
+Process finished with exit code 0

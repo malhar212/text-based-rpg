@@ -1,0 +1,170 @@
+You can input N for North, E for East, S for South, W for West
+You are in a cave,
+There are 3 arrows here
+
+You can move in
+NORTH: N
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+n
+
+You are in a tunnel,
+There are 3 arrows here
+
+You can move in
+NORTH: N
+SOUTH: S
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+n
+
+You are in a cave,
+There is a rancid smell somewhere near
+There is treasure here
+You find 5 diamonds
+You can move in
+NORTH: N
+SOUTH: S
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+w
+
+You are in a cave,
+There is a very strong rancid smell somewhere near
+There is treasure here
+You find 4 sapphires
+You can move in
+NORTH: N
+EAST: E
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+p
+
+You picked up 4 sapphires
+You now have the following treasure 4 sapphires
+You have 3 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+s
+
+Where do you want to shoot?
+w
+
+How far do you want to shoot?
+1
+Arrow destination 4, 1
+
+You hear a painful roar in the distance. It seems your arrow hit an Otyugh
+You have 2 arrows left
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+s
+
+Where do you want to shoot?
+w
+
+How far do you want to shoot?
+1
+Arrow destination 4, 1
+
+You hear a painful roar and wild thrashing in the darkness and then silence.It seems you've killed an Otyugh
+You have 1 arrow left
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+w
+
+You are in a cave,
+There is a very strong rancid smell somewhere near
+There is treasure here
+You find 5 sapphires 5 diamonds
+There are 3 arrows here
+
+You can move in
+NORTH: N
+SOUTH: S
+EAST: E
+WEST: W
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+p
+
+You have picked up 3 arrows
+You picked up 5 sapphires 5 diamonds
+You now have the following treasure 9 sapphires 5 diamonds
+You have 4 arrows left
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+s
+
+Where do you want to shoot?
+w
+
+How far do you want to shoot?
+1
+Arrow destination 4, 2
+
+You hear a painful roar in the distance. It seems your arrow hit an Otyugh
+You have 3 arrows left
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+w
+0
+Random number 0
+
+There is an injured Otyugh resting. You have miraculously survived!!
+You are in a cave,
+There is a very strong rancid smell somewhere near
+There are 3 arrows here
+
+You can move in
+NORTH: N
+SOUTH: S
+EAST: E
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+s
+
+Where do you want to shoot?
+n
+
+How far do you want to shoot?
+1
+Arrow destination 3, 2
+
+You hear a painful roar in the distance. It seems your arrow hit an Otyugh
+You have 2 arrows left
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+s
+
+Where do you want to shoot?
+n
+
+How far do you want to shoot?
+1
+Arrow destination 3, 2
+
+You hear a painful roar and wild thrashing in the darkness and then silence.It seems you've killed an Otyugh
+You have 1 arrow left
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+m
+
+Where do we go?
+n
+
+You have escaped the mines of Moria
+You collected these treasures on your journey SAPPHIRES: 9 DIAMONDS: 5
+Process finished with exit code 0

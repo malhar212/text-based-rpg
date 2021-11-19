@@ -1,10 +1,12 @@
 package dungeon;
 
+import java.util.Locale;
+
 /**
  * Represents the commands available at a location.
  */
 public enum Commands {
-  MOVE("M"), PICKUP("P"), SHOOT("S");
+  MOVE("M"), PICKUP("P"), SHOOT("S"), QUIT("Q");
 
   private final String shortHand;
 
@@ -29,6 +31,7 @@ public enum Commands {
    * @throws IllegalArgumentException if the provided shorthand is invalid.
    */
   public static Commands getByShortHand(String shortHand) throws IllegalArgumentException {
+    shortHand = shortHand.toUpperCase(Locale.ROOT);
     switch (shortHand) {
       case "M": {
         return MOVE;
@@ -38,6 +41,9 @@ public enum Commands {
       }
       case "S": {
         return SHOOT;
+      }
+      case "Q": {
+        return QUIT;
       }
       default: {
         throw new IllegalArgumentException("No value for this shorthand");

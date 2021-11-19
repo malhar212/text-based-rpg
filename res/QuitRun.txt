@@ -1,0 +1,11 @@
+You can input N for North, E for East, S for South, W for West
+You are in a cave,
+There are 3 arrows here
+
+You can move in
+NORTH: N
+
+What do you want to do? MOVE: M SHOOT: S PICKUP: P QUIT: Q
+q
+
+Process finished with exit code 0

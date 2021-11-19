@@ -4,12 +4,12 @@ package dungeon;
 /*
  * Represents a monster
  */
-class UrukHai implements Monster {
+class Otyugh implements Monster {
 
   private int health;
   private static final int DEFAULT_HEALTH = 2;
 
-  public UrukHai() {
+  public Otyugh() {
     this.health = DEFAULT_HEALTH;
   }
 
