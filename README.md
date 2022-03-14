@@ -1,19 +1,19 @@
-#Dungeons
+# Dungeons
 
-##Overview
+## Overview
 Dungeons is dungeon game that creates a maze of caves and tunnels and starts off a player at the start cave.\
 Player can navigate through the maze collecting any treasures in the caves along the way or picking up arrows.\
 Player can shoot the arrows to kill monsters they encounter along the way\
 There will always be a monster at the end cave.
 
-##List of Features
+## List of Features
 1. Player can collect treasure.
 2. Player can collect arrows.
 3. Players can move in NORTH, SOUTH, EAST, WEST direction if the cave has those directions open.
 4. Player can shoot an arrow in the directions that are available from the current location.
 5. Player can kill a monster(Otyugh).
 
-##How to run
+## How to run
 1. Make sure java is installed on the system.
 2. Navigate to the directory where the jar file is stored using terminal.
 3. Run command `java -jar Project4.jar 5 4 true 5 50 3`
@@ -25,7 +25,7 @@ There will always be a monster at the end cave.
 9. `treasureAndArrowPercentage` integer percentage of caves to be filled with treasure and percentage of all locations to be filled with arrows.
 10. `numberOfMonsters` number of monsters in the dungeon. Even if number of monsters passed is 0 there will be a monster at the end.
 
-##How to use Program
+## How to use Program
 The game can be played by following instructions as provided on the screen.\
 
 Common controls are to enter the corresponding alphabet irrespective of case\
@@ -89,7 +89,7 @@ boolean hasTreasure = player.hasTreasure();
 Map<Treasure, Integer> treasure = player.getTreasure();
 ```
 
-##Description of Example
+## Description of Example
 Examples of output
 
 Intro after starting the game
@@ -237,26 +237,26 @@ You have escaped the mines of Moria
 You collected these treasures on your journey SAPPHIRES: 9 DIAMONDS: 5
 ```
 
-##Design Changes
+## Design Changes
 The following changes were made to the previous design: 
 1. Added Command Pattern related interface and classes.//TODO
 2. Added enum Commands for easier validation all command to be taken from user input.
 3. Added enum ArrowHitOutcome.
 4. Some changes to method name and return types.
 
-##Assumptions
+## Assumptions
 The following assumptions were made:
 1. Player is instantiated inside Dungeon model.
 2. On pickup command all items of a type will be picked up.
 3. Arrows can only be fired at a distance of 1-5.
 4. Even if number of monsters passed is 0 there will be a monster at the end.
 
-##Limitations
+## Limitations
 1. Players cannot set their player names due to requirement of the project.
 2. Next location cannot be fetched without moving to that location.
 3. Arrows can only be fired at a distance of 1-5.
 
-##Citations
+## Citations
 1. [Random number generation between range](https://www.delftstack.com/howto/java/java-random-number-in-range/)
 2. [Running jar file](https://stackoverflow.com/questions/1238145/how-to-run-a-jar-file)
 3. [Markdown guide](https://www.markdownguide.org/cheat-sheet/)
