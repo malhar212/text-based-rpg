@@ -195,7 +195,7 @@ public final class LocationNode implements LocationPrivate {
    */
   @Override
   public boolean isCave() {
-    return !(nextMoves.size() == 2);
+    return nextMoves.size() != 2;
   }
 
   /**

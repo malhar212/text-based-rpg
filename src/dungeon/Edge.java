@@ -30,7 +30,10 @@ final class Edge {
     return move;
   }
 
-  public Edge(int x, int y, int x2, int y2, Move move) {
+  public Edge(int x, int y, int x2, int y2, Move move) throws IllegalArgumentException {
+    if (move == null) {
+      throw new IllegalArgumentException("Move cannot be null");
+    }
     this.x1 = x;
     this.y1 = y;
     this.x2 = x2;

@@ -58,6 +58,11 @@ public class PlayerModel implements PlayerPrivate {
     return arrows;
   }
 
+  /**
+   * Checks whether this Player has arrows.
+   *
+   * @return true if Player has arrows.
+   */
   @Override
   public boolean hasArrows() {
     return arrows > 0;
@@ -96,7 +101,6 @@ public class PlayerModel implements PlayerPrivate {
    * @throws IllegalStateException if called when user has no arrows;
    */
   //package-private due to interface
-  //TODO maybe change to boolean
   @Override
   public void fireArrow() throws IllegalStateException {
     if (arrows <= 0) {
@@ -105,8 +109,12 @@ public class PlayerModel implements PlayerPrivate {
     arrows--;
   }
 
+  //package-private due to interface
   @Override
   public void pickArrows(int arrows) {
+    if (arrows <= 0) {
+      throw new IllegalArgumentException("Arrows to pick cannot be 0 or negative");
+    }
     this.arrows += arrows;
   }
 }

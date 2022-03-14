@@ -42,11 +42,13 @@ public final class GameRandomizer implements Randomizer {
   @Override
   public int getRandomValue(int minBound, int maxBound) {
     if (randomSequence.length == 0) {
-      return random.nextInt(maxBound + 1 - minBound) + minBound;
+      int i = random.nextInt(maxBound + 1 - minBound) + minBound;
+      return i;
     } else {
       if (count >= randomSequence.length) {
+        int i = random.nextInt(maxBound + 1 - minBound) + minBound;
         randomSequence = new int[]{};
-        return random.nextInt(maxBound + 1 - minBound) + minBound;
+        return i;
       }
       int nextInt = randomSequence[count];
       count++;

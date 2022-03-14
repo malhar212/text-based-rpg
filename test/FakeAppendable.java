@@ -8,7 +8,7 @@ public class FakeAppendable implements Appendable {
   /**
    * Appends the specified character sequence to this {@code Appendable}.
    *
-   * <p> Depending on which class implements the character sequence
+   * <p>Depending on which class implements the character sequence
    * {@code csq}, the entire sequence may not be appended.  For
    * instance, if {@code csq} is a {@link CharBuffer} then
    * the subsequence to append is defined by the buffer's position and limit.
@@ -28,7 +28,7 @@ public class FakeAppendable implements Appendable {
    * Appends a subsequence of the specified character sequence to this
    * {@code Appendable}.
    *
-   * <p> An invocation of this method of the form {@code out.append(csq, start, end)}
+   * <p>An invocation of this method of the form {@code out.append(csq, start, end)}
    * when {@code csq} is not {@code null}, behaves in
    * exactly the same way as the invocation
    *

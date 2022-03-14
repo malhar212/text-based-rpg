@@ -16,14 +16,14 @@ There will always be a monster at the end cave.
 ##How to run
 1. Make sure java is installed on the system.
 2. Navigate to the directory where the jar file is stored using terminal.
-3. Run command `java -jar Project3.jar 5 4 false 0 30 3`
+3. Run command `java -jar Project4.jar 5 4 true 5 50 3`
 4. Where command arguments are `java -jar Project3.jar rows columns wrapped interconnectivity treasureAndArrowPercentage numberOfMonsters`
 5. `rows` integer number of rows of dungeon maze.
 6. `columns` integer number of columns of the dungeon maze.
 7. `wrapped` boolean for maze wrapped around edges or not.
 8. `interconnectivity` integer interconnectivity of the maze.
 9. `treasureAndArrowPercentage` integer percentage of caves to be filled with treasure and percentage of all locations to be filled with arrows.
-10. `numberOfMonsters` number of monsters in the dungeon.
+10. `numberOfMonsters` number of monsters in the dungeon. Even if number of monsters passed is 0 there will be a monster at the end.
 
 ##How to use Program
 The game can be played by following instructions as provided on the screen.\
@@ -249,6 +249,7 @@ The following assumptions were made:
 1. Player is instantiated inside Dungeon model.
 2. On pickup command all items of a type will be picked up.
 3. Arrows can only be fired at a distance of 1-5.
+4. Even if number of monsters passed is 0 there will be a monster at the end.
 
 ##Limitations
 1. Players cannot set their player names due to requirement of the project.

@@ -32,6 +32,9 @@ public enum Commands {
    * @throws IllegalArgumentException if the provided shorthand is invalid.
    */
   public static Commands getByShortHand(String shortHand) throws IllegalArgumentException {
+    if (shortHand == null) {
+      throw new IllegalArgumentException("Provided value cannot be null");
+    }
     shortHand = shortHand.toUpperCase(Locale.ROOT);
     switch (shortHand) {
       case "M": {

@@ -127,7 +127,6 @@ public class DungeonControllerTest {
     Location playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
     assertEquals(expectedLocation.getRow(), playerCurrentLocation.getRow());
     assertEquals(expectedLocation.getColumn(), playerCurrentLocation.getColumn());
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("Where do we go?"));
   }
 
@@ -148,7 +147,6 @@ public class DungeonControllerTest {
     playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
     assertEquals(nextLocation.getRow(), playerCurrentLocation.getRow());
     assertEquals(nextLocation.getColumn(), playerCurrentLocation.getColumn());
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("Where do we go?"));
   }
 
@@ -169,7 +167,6 @@ public class DungeonControllerTest {
     playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
     assertEquals(nextLocation.getRow(), playerCurrentLocation.getRow());
     assertEquals(nextLocation.getColumn(), playerCurrentLocation.getColumn());
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("Where do we go?"));
   }
 
@@ -241,7 +238,6 @@ public class DungeonControllerTest {
     } catch (IOException ioException) {
       assertEquals("Shouldn't throw error", ioException.getMessage());
     }
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("You have escaped the mines of Moria"));
   }
 
@@ -255,7 +251,6 @@ public class DungeonControllerTest {
     } catch (IOException ioException) {
       assertEquals("Shouldn't throw error", ioException.getMessage());
     }
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("There is an injured Otyugh resting. You have "
             + "miraculously survived!!"));
   }
@@ -270,7 +265,6 @@ public class DungeonControllerTest {
     } catch (IOException ioException) {
       assertEquals("Shouldn't throw error", ioException.getMessage());
     }
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("You were killed. You died a gruesome death at "
             + "the hands of the Otyugh"));
   }
@@ -311,7 +305,6 @@ public class DungeonControllerTest {
     //player has treasure and same as arrows that was in location
     assertTrue(playerNewDescription.hasArrows());
     assertEquals(expectedArrows, playerNewDescription.getArrows());
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("What to pick? Enter A for arrows or T for treasure"));
     assertTrue(gameLog.toString().contains(new StringBuilder("You have picked up ")
             .append(locationArrows).append(" arrows")));
@@ -341,7 +334,6 @@ public class DungeonControllerTest {
     //player has treasure and same as arrows that was in location
     assertTrue(playerNewDescription.hasArrows());
     assertEquals(expectedArrows, playerNewDescription.getArrows());
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("No arrows to pick\n"));
   }
 
@@ -363,7 +355,6 @@ public class DungeonControllerTest {
     } catch (IOException ioException) {
       assertEquals("Shouldn't throw error", ioException.getMessage());
     }
-    System.out.println(gameLog);
     Player playerNewDescription = dungeonMonster.getPlayerDescription();
     //Location no longer has treasure after picking
     assertFalse(playerNewLocationWithTreasure.hasTreasure());
@@ -399,7 +390,6 @@ public class DungeonControllerTest {
     } catch (IOException ioException) {
       assertEquals("Shouldn't throw error", ioException.getMessage());
     }
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("Provided move is not a valid move SOUTH"));
   }
 
@@ -427,7 +417,6 @@ public class DungeonControllerTest {
     } catch (IOException ioException) {
       assertEquals("Shouldn't throw error", ioException.getMessage());
     }
-    System.out.println(gameLog);
     assertTrue(gameLog.toString().contains("Provided direction is not a valid direction for "
             + "current location"));
   }

@@ -1,10 +1,10 @@
 package dungeon;
-//package-private
 
 /*
  * Represents a monster
  */
-class Otyugh implements Monster {
+//package-private
+final class Otyugh implements Monster {
 
   private int health;
   private static final int DEFAULT_HEALTH = 2;

@@ -85,6 +85,17 @@ public class DungeonTest {
     dungeonMonster = new DungeonModel(
             5, 4, true, 4, 50, 3,
             monsterRandomizer);
+    //The following deterministic dungeon is being tested for monster
+    //            |     |  |
+    //            M  0--0  2--
+    //            |  |
+    //            2--2--0  1
+    //            |  |     |
+    //            2  2--XM--2--
+    //                  |
+    //            1--0  M  0--
+    //            |  |
+    //            2--$1--0--1
   }
 
   @Test
@@ -448,7 +459,6 @@ public class DungeonTest {
     assertEquals(1, row);
     assertEquals(0, column);
     //Try to move from 1,0 to 1,3
-    System.out.println(dungeonTreasure30.getAvailableDirections());
     dungeonTreasure30.movePlayer(Move.EAST);
   }
 
@@ -575,6 +585,11 @@ public class DungeonTest {
     assertEquals(ArrowHitOutcome.INJURED,arrowHitOutcome);
     arrowHitOutcome = dungeonMonster.shootArrow(Move.SOUTH, 2);
     assertEquals(ArrowHitOutcome.MISS,arrowHitOutcome);
+    //Miss didn't kill monster even though it is in path
+    monsterFilledLocations =
+            getMonsterFilledLocations(dungeonMonster);
+    assertEquals(expectedNumberOfMonsters,
+            monsterFilledLocations.size());
     arrowHitOutcome = dungeonMonster.shootArrow(Move.SOUTH, 1);
     assertEquals(ArrowHitOutcome.KILLED,arrowHitOutcome);
     dungeonMonster.movePlayer(Move.SOUTH);
@@ -624,6 +639,95 @@ public class DungeonTest {
     assertEquals(SmellLevel.NONE, dungeonMonster.getSmell(playerCurrentLocation));
   }
 
+  @Test
+  public void testMonsterSmellGoesAfterMonsterKilled() {
+    Location playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
+    assertEquals(SmellLevel.LESS, dungeonMonster.getSmell(playerCurrentLocation));
+    dungeonMonster.movePlayer(Move.EAST);
+    playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
+    assertEquals(SmellLevel.MORE, dungeonMonster.getSmell(playerCurrentLocation));
+    dungeonMonster.movePlayer(Move.NORTH);
+    playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
+    assertEquals(SmellLevel.LESS, dungeonMonster.getSmell(playerCurrentLocation));
+    dungeonMonster.movePlayer(Move.WEST);
+    playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
+    assertEquals(SmellLevel.NONE, dungeonMonster.getSmell(playerCurrentLocation));
+    dungeonMonster.movePlayer(Move.SOUTH);
+    dungeonMonster.movePlayer(Move.EAST);
+    ArrowHitOutcome arrowHitOutcome = dungeonMonster.shootArrow(Move.SOUTH, 1);
+    assertEquals(ArrowHitOutcome.INJURED,arrowHitOutcome);
+    arrowHitOutcome = dungeonMonster.shootArrow(Move.SOUTH, 2);
+    assertEquals(ArrowHitOutcome.MISS,arrowHitOutcome);
+    arrowHitOutcome = dungeonMonster.shootArrow(Move.SOUTH, 1);
+    assertEquals(ArrowHitOutcome.KILLED,arrowHitOutcome);
+    //after monster killed
+    playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
+    assertEquals(SmellLevel.NONE, dungeonMonster.getSmell(playerCurrentLocation));
+    dungeonMonster.movePlayer(Move.WEST);
+    playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
+    assertEquals(SmellLevel.NONE, dungeonMonster.getSmell(playerCurrentLocation));
+    dungeonMonster.movePlayer(Move.NORTH);
+    playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
+    assertEquals(SmellLevel.NONE, dungeonMonster.getSmell(playerCurrentLocation));
+    dungeonMonster.movePlayer(Move.EAST);
+    playerCurrentLocation = dungeonMonster.getPlayerCurrentLocation();
+    assertEquals(SmellLevel.NONE, dungeonMonster.getSmell(playerCurrentLocation));
+  }
+
+  @Test
+  public void testChanceSurviveWithInjuredMonster() {
+    Randomizer monsterRandomizer = new GameRandomizer(35, 33, 6, 6, 31, 4, 0,
+            32, 28, 12, 14, 7,14, 20, 4, 23, 11, 12, 11, 2, 10, 4, 4, 0, 2, 3, 1, 3,
+            9, 6, 7, 1, 4, 5, 2, 2, 1, 2, 1, 0, 16, 1, 2, 4, 2, 1, 1, 4, 3, 2, 2, 5,
+            0, 1, 1, 1, 2, 1, 6, 2, 0, 5, 0, 1, 1, 2, 2, 3, 1, 3, 0, 2, 2, 1, 0, 4, 5,
+            2, 1, 5, 0, 3, 11, 2, 0, 3, 13, 3, 6, 1, 0, 2, 11, 2, 12, 2, 11, 1, 8, 3, 9,
+            2, 0, 2, 0, 7, 0);
+    DungeonModel monsterDungeon = new DungeonModel(
+            5, 4, true, 4, 50, 3,
+            monsterRandomizer);
+    monsterDungeon.movePlayer(Move.EAST);
+    monsterDungeon.shootArrow(Move.SOUTH,1);
+    monsterDungeon.movePlayer(Move.SOUTH);
+    Location playerCurrentLocation = monsterDungeon.getPlayerCurrentLocation();
+    assertTrue(playerCurrentLocation.hasMonster());
+    assertFalse(monsterDungeon.isGameOver());
+    assertFalse(monsterDungeon.isPlayerDead());
+  }
+
+  @Test
+  public void testChanceDieWithInjuredMonster() {
+    Randomizer monsterRandomizer = new GameRandomizer(35, 33, 6, 6, 31, 4, 0,
+            32, 28, 12, 14, 7,14, 20, 4, 23, 11, 12, 11, 2, 10, 4, 4, 0, 2, 3, 1, 3,
+            9, 6, 7, 1, 4, 5, 2, 2, 1, 2, 1, 0, 16, 1, 2, 4, 2, 1, 1, 4, 3, 2, 2, 5,
+            0, 1, 1, 1, 2, 1, 6, 2, 0, 5, 0, 1, 1, 2, 2, 3, 1, 3, 0, 2, 2, 1, 0, 4, 5,
+            2, 1, 5, 0, 3, 11, 2, 0, 3, 13, 3, 6, 1, 0, 2, 11, 2, 12, 2, 11, 1, 8, 3, 9,
+            2, 0, 2, 0, 7, 1);
+    DungeonModel monsterDungeon = new DungeonModel(
+            5, 4, true, 4, 50, 3,
+            monsterRandomizer);
+    monsterDungeon.movePlayer(Move.EAST);
+    monsterDungeon.shootArrow(Move.SOUTH,1);
+    monsterDungeon.movePlayer(Move.SOUTH);
+    Location playerCurrentLocation = monsterDungeon.getPlayerCurrentLocation();
+    assertTrue(playerCurrentLocation.hasMonster());
+    assertTrue(monsterDungeon.isGameOver());
+    assertTrue(monsterDungeon.isPlayerDead());
+  }
+
+  @Test
+  public void testPlayerArrowDecrease() {
+    Player playerDescription = dungeonMonster.getPlayerDescription();
+    int initialValue = playerDescription.getArrows();
+    assertTrue(playerDescription.hasArrows());
+    assertEquals(3, initialValue);
+    dungeonMonster.shootArrow(Move.NORTH, 1);
+    dungeonMonster.shootArrow(Move.EAST, 1);
+    dungeonMonster.shootArrow(Move.WEST, 1);
+    int expectedValue = 0;
+    playerDescription = dungeonMonster.getPlayerDescription();
+    assertFalse(playerDescription.hasArrows());
+    assertEquals(expectedValue, playerDescription.getArrows());
+  }
 
   @Test
   public void testMonsterKillsPlayer() {
@@ -640,7 +744,7 @@ public class DungeonTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testMonsterKillsPlayerGameEndExceptionOnMove() {
+  public void testGameEndExceptionOnMovePlayer() {
     //Testing with a deterministic maze
     //testing no monster on start location
     assertFalse(dungeonMonster.getStartLocation().hasMonster());
@@ -655,7 +759,7 @@ public class DungeonTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testMonsterKillsPlayerGameEndExceptionOnPickTreasure() {
+  public void testGameEndExceptionOnPickTreasure() {
     //Testing with a deterministic maze
     //testing no monster on start location
     assertFalse(dungeonMonster.getStartLocation().hasMonster());
@@ -670,7 +774,7 @@ public class DungeonTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testMonsterKillsPlayerGameEndExceptionOnPickArrow() {
+  public void testGameEndExceptionOnPickArrow() {
     //Testing with a deterministic maze
     //testing no monster on start location
     assertFalse(dungeonMonster.getStartLocation().hasMonster());
@@ -685,7 +789,7 @@ public class DungeonTest {
   }
 
   @Test(expected = IllegalStateException.class)
-  public void testMonsterKillsPlayerGameEndExceptionOnShootArrow() {
+  public void testGameEndExceptionOnShootArrow() {
     //Testing with a deterministic maze
     //testing no monster on start location
     assertFalse(dungeonMonster.getStartLocation().hasMonster());
@@ -870,6 +974,39 @@ public class DungeonTest {
   public void testInvalidArrowPicking() {
     //Picking on start position of maze with no treasure
     dungeon.playerPickArrows();
+  }
+
+  @Test(expected = IllegalStateException.class)
+  public void testShootArrowWhenNoArrowWithPlayer() {
+    //Picking on start position of maze with no treasure
+    dungeonMonster.shootArrow(Move.EAST,1);
+    dungeonMonster.shootArrow(Move.NORTH,1);
+    dungeonMonster.shootArrow(Move.NORTH,1);
+    dungeonMonster.shootArrow(Move.NORTH,1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testShootInvalidDirection() {
+    //Picking on start position of maze with no treasure
+    dungeonMonster.shootArrow(Move.SOUTH,1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testShootInvalidDistance() {
+    //Picking on start position of maze with no treasure
+    dungeonMonster.shootArrow(Move.NORTH,6);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testShootNegativeDistance() {
+    //Picking on start position of maze with no treasure
+    dungeonMonster.shootArrow(Move.NORTH,-1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testShootZeroDistance() {
+    //Picking on start position of maze with no treasure
+    dungeonMonster.shootArrow(Move.NORTH,0);
   }
 
   @Test
@@ -1127,7 +1264,6 @@ public class DungeonTest {
     for (List<Location> list : maze) {
       for (Location locationNode : list) {
         if (locationNode.hasMonster()) {
-          System.out.println(locationNode.getRow() + ", " + locationNode.getColumn());
           monsterFilledLocations.add(locationNode);
         }
       }

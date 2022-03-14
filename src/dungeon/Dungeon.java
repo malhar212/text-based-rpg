@@ -87,6 +87,7 @@ public interface Dungeon {
    * @param location the location whose smell level is to be obtained.
    * @return SmellLevel of the particular location.
    * @throws IllegalStateException if there is problem with SmellLevel at the location.
+   * @throws IllegalArgumentException if invalid location is provided.
    */
   SmellLevel getSmell(Location location) throws IllegalStateException;
 

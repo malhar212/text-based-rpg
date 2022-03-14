@@ -1,9 +1,7 @@
 package dungeon;
 
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -32,11 +30,6 @@ public class DungeonConsoleController implements DungeonController {
     this.appendable = appendable;
   }
 
-  private static boolean compareLocations(Location locationA, Location locationB) {
-    return locationA.getRow() == locationB.getRow()
-            && locationA.getColumn() == locationB.getColumn();
-  }
-
   /**
    * Starts the run of a dungeon game.
    *
@@ -52,6 +45,7 @@ public class DungeonConsoleController implements DungeonController {
     Scanner scanner = new Scanner(readable);
     appendable.append("Welcome to the dungeons");
     appendable.append("\nYou can input N for North, E for East, S for South, W for West");
+    outerloop:
     while (!model.isGameOver()) {
       Location playerCurrentLocation = model.getPlayerCurrentLocation();
       Set<Commands> commandsList = new LinkedHashSet<>();
@@ -104,6 +98,7 @@ public class DungeonConsoleController implements DungeonController {
       }
       Commands commands = null;
       commandsList.add(Commands.QUIT);
+      commandsLoop:
       while (commands != Commands.MOVE) {
         appendable.append("\nWhat do you want to do?");
         printCommandList(commandsList);
@@ -114,7 +109,6 @@ public class DungeonConsoleController implements DungeonController {
             commands = null;
           }
           if (commands != null) {
-            Command executableCommand = null;
             switch (commands) {
               case MOVE: {
                 Move direction = null;
@@ -123,8 +117,12 @@ public class DungeonConsoleController implements DungeonController {
                   String nextMove = scanner.next();
                   direction = getDirection(nextMove);
                 }
-                executableCommand = new MoveCommand(direction);
-                model.movePlayer(direction);
+                try {
+                  model.movePlayer(direction);
+                }
+                catch (IllegalArgumentException iae) {
+                  appendable.append(iae.getMessage());
+                }
                 Location newPlayerLocation = model.getPlayerCurrentLocation();
                 if (newPlayerLocation.hasMonster() && !model.isPlayerDead()) {
                   appendable.append("\nThere is an injured Otyugh resting. You have miraculously "
@@ -137,10 +135,15 @@ public class DungeonConsoleController implements DungeonController {
                 while (itemCommand == null) {
                   appendable.append("\nWhat to pick? Enter A for arrows or T for treasure\n");
                   String nextCommand = scanner.next();
-                  itemCommand = Commands.getByShortHand(nextCommand);
-                  if (!itemCommand.equals(Commands.PICKARROWS)
-                          && !itemCommand.equals(Commands.PICKTREASURE)) {
-                    itemCommand = null;
+                  try {
+                    itemCommand = Commands.getByShortHand(nextCommand);
+                    if (!itemCommand.equals(Commands.PICKARROWS)
+                            && !itemCommand.equals(Commands.PICKTREASURE)) {
+                      itemCommand = null;
+                    }
+                  }
+                  catch (IllegalArgumentException iae) {
+                    appendable.append("Please pick a valid pickup option");
                   }
                 }
                 switch (itemCommand) {
@@ -194,8 +197,16 @@ public class DungeonConsoleController implements DungeonController {
                   } catch (NumberFormatException ime) {
                     appendable.append("\nPlease enter a valid distance as an integer\n");
                   } catch (IllegalArgumentException iae) {
-                    appendable.append(iae.getMessage());
+                    appendable.append("\n").append(iae.getMessage());
+                    if (iae.getMessage().startsWith("Provided direction is not a valid")) {
+                      break commandsLoop;
+                    }
                     arrowDistance = null;
+                  } catch (IllegalStateException ise) {
+                    appendable.append(ise.getMessage());
+                    if (model.isGameOver()) {
+                      break outerloop;
+                    }
                   }
                 }
                 switch (arrowHit) {
@@ -239,8 +250,7 @@ public class DungeonConsoleController implements DungeonController {
                 break;
               }
               case QUIT: {
-                System.exit(0);
-                break;
+                break outerloop;
               }
               default: {
                 appendable.append("\nYour command is invalid");
@@ -253,7 +263,6 @@ public class DungeonConsoleController implements DungeonController {
           printCommandList(commandsList);
         }
       }
-      //visualizeKruskals(model);
     }
     if (model.isPlayerDead()) {
       appendable.append("\nYou were killed. You died a gruesome death at the hands of the Otyugh");
@@ -272,7 +281,11 @@ public class DungeonConsoleController implements DungeonController {
     }
   }
 
-  private void printTreasures(Map<Treasure, Integer> treasure) throws IOException {
+  private void printTreasures(Map<Treasure, Integer> treasure) throws IOException,
+          IllegalArgumentException {
+    if (treasure == null) {
+      throw new IllegalArgumentException("Please provide a valid value");
+    }
     for (Treasure treasureItem : treasure.keySet()) {
       Integer count = treasure.get(treasureItem);
       appendable.append(" ").append(String.valueOf(count)).append(" ")
@@ -280,7 +293,11 @@ public class DungeonConsoleController implements DungeonController {
     }
   }
 
-  private void printCommandList(Set<Commands> commandsList) throws IOException {
+  private void printCommandList(Set<Commands> commandsList) throws IOException,
+          IllegalArgumentException {
+    if (commandsList == null) {
+      throw new IllegalArgumentException("Please provide valid command list");
+    }
     for (Commands loopCommand : commandsList) {
       appendable.append(" ").append(loopCommand.name()).append(": ")
               .append(loopCommand.getShortHand());
@@ -288,7 +305,10 @@ public class DungeonConsoleController implements DungeonController {
     appendable.append("\n");
   }
 
-  private Move getDirection(String nextMove) throws IOException {
+  private Move getDirection(String nextMove) throws IOException, IllegalArgumentException {
+    if (nextMove == null) {
+      throw new IllegalArgumentException("Please provide valid string");
+    }
     nextMove = nextMove.toUpperCase();
     Move direction = null;
     switch (nextMove) {
@@ -317,7 +337,11 @@ public class DungeonConsoleController implements DungeonController {
     return direction;
   }
 
-  private String getTreasureString(Treasure treasureItem, Integer count) {
+  private String getTreasureString(Treasure treasureItem, Integer count)
+          throws IllegalArgumentException {
+    if (treasureItem == null || count == null) {
+      throw new IllegalArgumentException("Please provide valid treasure and count");
+    }
     switch (treasureItem) {
       case RUBIES: {
         if (count > 1) {
@@ -347,76 +371,10 @@ public class DungeonConsoleController implements DungeonController {
 
   }
 
-  private void visualizeKruskals(Dungeon dungeon) throws IOException {
-    List<List<Location>> maze = dungeon.getMaze();
-    Location startLocation = dungeon.getStartLocation();
-    Location endLocation = dungeon.getEndLocation();
-    Location playerCurrentLocation = dungeon.getPlayerCurrentLocation();
-    Appendable sb = appendable;
-    int count = 0;
-    for (List<Location> list : maze) {
-      sb.append("\n");
-      for (Location locationNode : list) {
-        Set<Move> nextMoves = locationNode.getNextMoves();
-        if (nextMoves.contains(Move.NORTH)) {
-          sb.append("|");
-          count++;
-        } else {
-          sb.append(" ");
-        }
-        sb.append("  ");
-      }
-      sb.append("\n");
-      for (Location locationNode : list) {
-        if (compareLocations(startLocation, locationNode)
-                && compareLocations(playerCurrentLocation, locationNode)) {
-          sb.append("$");
-        } else if (compareLocations(startLocation, locationNode)) {
-          sb.append("S");
-        } else if (compareLocations(endLocation, locationNode)
-                && compareLocations(playerCurrentLocation, locationNode)) {
-          if (locationNode.hasMonster()) {
-            sb.append("M");
-          } else {
-            sb.append("*");
-          }
-        } else if (compareLocations(playerCurrentLocation, locationNode)) {
-          sb.append("P");
-        } else if (compareLocations(endLocation, locationNode)) {
-          sb.append("X");
-        }
-        /*if (locationNode.hasTreasure()) {
-          sb.append("▲");
-        }*/
-        if (locationNode.hasMonster()) {
-          sb.append("M");
-        } else {
-          switch (dungeon.getSmell(locationNode)) {
-            case NONE:
-              sb.append(String.valueOf(0));
-              break;
-            case LESS:
-              sb.append(String.valueOf(1));
-              break;
-            case MORE:
-              sb.append(String.valueOf(2));
-              break;
-            default:
-              sb.append("N");
-          }
-        }
-        Set<Move> nextMoves = locationNode.getNextMoves();
-        if (nextMoves.contains(Move.WEST)) {
-          sb.append("--");
-          count++;
-        } else {
-          sb.append("  ");
-        }
-      }
+  private void printPlayerDescription(Player player) throws IOException, IllegalArgumentException {
+    if (player == null) {
+      throw new IllegalArgumentException("Please provide valid player");
     }
-  }
-
-  private void printPlayerDescription(Player player) throws IOException {
     if (player.hasTreasure()) {
       Map<Treasure, Integer> treasure = player.getTreasure();
       appendable.append("\nYou now have the following treasure");
